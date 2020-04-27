@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+	  <meta charset="UTF-8">
+
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script type="text/javascript" src="js/jquery.js" />
+	<script type="text/javascript" src="js/bootstrap.js" />
+	<link href="css/addons/datatables.min.css" rel="stylesheet">
+	<!-- MDBootstrap Datatables  -->
+<script type="text/javascript" src="js/addons/datatables.min.js"></script>
+
+	<title>Ciudad Silvestre</title>
+</head>
+<style type="text/css">
+/*	table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+  bottom: .5em;
+}*/
+body{
+	background: url("img/jitomate.jpg");
+	background-size: cover;
+}
+.head{
+	text-align: center;
+	font-family: monospace;
+	background-color: #fafafa;
+}
+.products{
+	background-color: whitesmoke;
+}
+.searcharea{
+	color: white;
+    background-color: #49a954;
+}
+.logo{
+	width:150px;
+}
+.prInput{
+	width:100px;
+}
+.carrito{
+	font-size: 15pt;
+    height: 100%;
+    text-align: center;
+    background-color: grey;
+    color: white;
+    border-radius: 25px;
+  border: 2px solid dimgrey;
+  padding: 20px;
+  cursor: pointer;
+  box-shadow: 3px 3px #5049a9;
+  
+}
+.carrito:hover{
+	background-color: #5049a9;
+}
+.carrito2{
+	font-size: 15pt;
+    width: 100%;
+    text-align: center;
+    background-color: #fafafa;
+    color: black;
+    border-radius: 25px;
+  border: 2px solid dimgrey;
+  padding: 20px;
+  /*box-shadow: 3px 3px #5049a9;*/
+  
+}
+.rabi{
+	border-radius: 15px;
+  border: 2px solid dimgrey;
+  padding: 20px;
+  box-shadow: 3px 3px #5049a9;
+}
+.ordenar{
+	font-size: 15pt;
+    width: 100%;
+    padding-left: 10%;
+    text-align: center;
+        background-color: grey;
+    color: white;
+    border-radius: 25px;
+  border: 2px solid dimgrey;
+  padding: 20px;
+  cursor: pointer;
+  box-shadow: 3px 3px #5049a9;
+  
+}
+.ordenar:hover{
+	background-color: #5049a9;
+}
+.total_title{
+	font-size: 26pt;
+    width: 80%;
+    padding-left: 10%;
+    text-align: center;
+    background-color: #49a954;
+    color: white;
+}
+.total{
+	font-size: 26pt;
+    width: 100%;
+    text-align: center;
+    background-color: #fafafa;
+    color: #49a954;
+}
+.compras{
+	background-color: lightgrey;
+
+}
+</style>
+
+<body>
+	<br>
+<div class="container head" >
+	<div class="row">
+		<div class="col-sm-6" >
+			<h1 ></h1>
+			<br>
+			<h5 style="color:black;"> @ciudad_silvestre nace con el objetivo de vincular a productores de zonas aledañas a la Ciudad de México con redes de consumo con interés en productos de alta calidad y en trazabilidad de producción.</h5>
+			<br>
+			<input type="button" value="¿Cómo funciona?" name=""/>
+		</div>
+		<div class="col-sm-6">
+			<img src="img/logo.png" class="logo">
+			<hr>
+			<h4 style="color:#49a954;">Menú para la semana del 14/abril al 21/abril del 2020</h4>
+		</div>
+	</div>
+
+
+	<hr/>
+</div>
+<div class="container compras" >
+	<div class="row">
+		<div class="col-sm-4" id="compras0">
+			
+		</div>
+		<div class="col-sm-4" id="compras1">
+			
+		</div>
+		<div class="col-sm-4" id="compras2">
+			
+		</div>
+	</div>
+</div>
+
+<div class="container searcharea" >
+		<div class="row">
+		<div class="col-sm-4" >
+			<p class="instrucciones">1-Añade productos a tu orden mediante el menú</p>
+			Buscar por palabra:<br>
+	<input type="text" id="myinput" style="width:100%;" class="rabi"/>
+		</div>
+		<div class="col-sm-4" >
+			<p class="instrucciones">2-Completa la información de tu pedido:</p>
+			<br>
+			<form>
+			  <div class="form-group">
+			    <label for="exampleInputEmail1"></label>
+			    <input type="email" class="form-control rabi" id="nombre" aria-describedby="emailHelp" placeholder="NOMBRE">
+			    <!-- <small id="emailHelp" class="form-text text-muted">Nombre</small> -->
+			  </div>
+			  <div class="form-group">
+			    <input type="number" class="form-control rabi" id="telefono" aria-describedby="emailHelp" placeholder="TELÉFONO">
+			    <!-- <small id="emailHelp" class="form-text text-muted">Nombre</small> -->
+			  </div>
+			  <div class="form-group">
+			    <input type="number" class="form-control rabi" id="direccion" aria-describedby="emailHelp" placeholder="DIRECCIÓN">
+			    <!-- <small id="emailHelp" class="form-text text-muted">Nombre</small> -->
+			  </div>
+			  <!-- <div class="form-check">
+			    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+			    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+			  </div> -->
+			  
+			</form>
+		</div>
+		<div class="col-sm-4" >
+			<p class="instrucciones">3-Reviza tu total y ordena aquí</p>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="carrito"><img src="img/carrito.png" style="width:50px;"></div>
+				</div>	
+				<div class="col-sm-6">
+					<div class="carrito2"><p style="font-size: 13pt;color:red;">total:</p><span id="sum">0</span> MXN </div>
+			
+				</div>
+			</div>
+
+			
+			
+			
+			<br>
+			<div class="ordenar" onclick="ordenar();">ordenar</div>
+			
+			<!-- Buscar por Producto:<br>
+	<select id="cars">
+  <option value="todos" selected="selected">Todos</option>
+  <option value="saab">Saab</option>
+  <option value="mercedes">Mercedes</option>
+  <option value="audi">Audi</option>
+</select> -->
+		</div>
+	</div>
+	<div class="row"><hr>
+	</div>	
+</div>	
+<hr/>
+<div class="container" id="table_cont" >
+<div class="row"></div>
+<div class="row">
+	<table id="myTable" class="table products" cellspacing="0" width="100%"> <!-- table-striped table-bordered table-sm -->
+	  	<thead>
+	    <tr>
+	      
+	      <th class="th-sm">Producto
+	      </th>
+	      <th class="th-sm">productor
+	      </th>
+	      <th class="th-sm">unidad
+	      </th>
+	      <th class="th-sm">precio
+	      </th>
+	      <th class="th-sm">ordenar
+	      </th>
+	     
+	    </tr>
+	  	</thead>
+	  	<tbody id="tabla_productos">
+	    	<!-- <tr>
+		      
+		      <td>Cerveza lagger</td>
+		      <td>Mounstro de Agua</td>
+		      <td>$61</td>
+		      <td>input</td>
+		      <td>preciotot</td>
+		    </tr> -->
+		    
+		  </tbody>
+		  <tfoot>
+		    <tr>
+		      
+	      <th class="th-sm">Producto
+	      </th>
+	      <th class="th-sm">productor
+	      </th>
+	      <th class="th-sm">unidad
+	      </th>
+	      <th class="th-sm">precio
+	      </th>
+	      <th class="th-sm">ordenar
+	      </th>
+		    </tr>
+		  </tfoot>
+	</table>
+</div> <!-- ROW -->
+</div> <!-- table_container -->
+</body>
+<script type="text/javascript">
+_MENU={};
+_productos={};
+$(document).ready(function(){
+	getMenu()
+
+
+	  $("#myinput").on("keyup", function() {
+	    var value = $(this).val().toLowerCase();
+	    $("#myTable tr").filter(function() {
+	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+	    });
+	  });
+
+});
+
+function getMenu(){
+
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+  		if (this.readyState == 4 && this.status == 200) {
+	    var myObj = JSON.parse(this.responseText);
+	    _MENU=myObj;
+	    despliegaMenu();
+	    
+	  	}
+	};
+	xmlhttp.open("GET", "/menu", true);
+	xmlhttp.send();
+}
+
+function despliegaMenu(){
+	productores=[];
+
+	for(entry in _MENU){
+
+		nomnew=entry.split("(");
+		redes="-";
+		nomproductor=nomnew[0].trim();
+		nomproductor.replace('"','');
+
+		productores.push(nomproductor);
+		// if(nomnew[1]){
+		// 	redes=nomnew[1].replace(")","");
+		// 	nomproductor='<a href="'+'https://www.instagram.com/'+nomproductor.replace("@","")+'" target="_blank">'+nomproductor+'</a>'
+		// }
+		
+	    for(i=0;i<_MENU[entry].length;i++){
+
+	    	d_=_MENU[entry][i];
+	    	nomproducto=d_[0].replace("[[[[[[[[[[[AGOTADO]]]]]]]]]]","").trim();
+	    	_productos[d_[9]]=[d_[0]+" | "+nomproductor,0,d_[5]]
+	    	
+	    	trstr='<tr class="prow" id="'+d_[9]+'">\
+		      <td>'+nomproducto+'</td>\
+		      <td>'+nomproductor+'</td>\
+		      <td>'+d_[1]+'</td>\
+		      <td>'+d_[5]+'</td>'+
+		      '<td><input type="number" id="tentacles" onchange="updateInput(this.value,'+d_[9]+')" class="prInput" producer="" product="'+d_[0]+'" name="tentacles"min="0" ></td>'+
+		    '</tr>'
+	    	$("#tabla_productos").append(trstr)
+	    }
+	}
+	    
+}
+
+function updateInput(ish, idrow){
+	_productos[idrow][1]=ish;
+	if(ish==0){
+		$("tr#"+idrow).css("background-color","white")
+	}
+	else{
+		$("tr#"+idrow).css("background-color","skyblue")
+	}
+	//console.log(_productos)
+	makesum()
+	//console.log(_productos)
+}
+function makesum(){
+	num=0;
+	sum=0;
+	$("#compras0").html("");
+	$("#compras1").html("");
+	$("#compras2").html("");
+	for (id in _productos){
+		rem=num%3;
+		item=_productos[id];
+		precio=Number.parseFloat(item[2].replace("$","") );
+		cantidad=Number.parseFloat(item[1] );
+		sum+=precio*cantidad;
+		if (cantidad>0) {
+			carro=item[0]+" - "+cantidad+" - "+(precio*cantidad);
+			$("#compras"+rem).append(carro);
+			num+=1;
+		}
+		
+	}
+	$("#sum").text(sum);
+}
+function ordenar(){
+		console.log("_productos",JSON.stringify(_productos));
+	        //var data = _productos;
+	        $.ajax({
+        url: '/orden',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(_productos),
+        dataType: 'json'
+    });
+
+}
+</script>
+	
+</script>
+</html>
