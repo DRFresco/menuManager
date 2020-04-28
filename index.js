@@ -41,7 +41,7 @@ app.get('/hello', function (req, res) {
 });
 app.post('/orden', function (req, res) {
   //console.log();
-  name=req.body["nombre"]+"__"+Math.floor(Math.random() * 100)+Math.floor(Date.now() / 60000);
+  name=req.body["nombre"].substring(0,4)+"__"+Math.floor(Math.random() * 100)+Math.floor(Date.now() / 60000);
   fs.writeFile("ordenes/"+name+".json",JSON.stringify(req.body) , function(err) {
 	    if(err) {
 	        return console.log(err);

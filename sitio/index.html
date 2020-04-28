@@ -49,9 +49,10 @@ body{
 }
 .carrito{
 	font-size: 15pt;
-    height: 100%;
+    width: 100%;
+
     text-align: center;
-    background-color: grey;
+    background-color: slategrey;
     color: white;
     border-radius: 25px;
   border: 2px solid dimgrey;
@@ -61,7 +62,7 @@ body{
   
 }
 .carrito:hover{
-	background-color: #5049a9;
+	background-color: white;
 }
 .carrito2{
 	font-size: 15pt;
@@ -86,7 +87,7 @@ body{
     width: 100%;
     padding-left: 10%;
     text-align: center;
-        background-color: grey;
+        background-color: slategrey;
     color: white;
     border-radius: 25px;
   border: 2px solid dimgrey;
@@ -96,7 +97,7 @@ body{
   
 }
 .ordenar:hover{
-	background-color: #5049a9;
+	background-color: white;
 }
 .total_title{
 	font-size: 26pt;
@@ -115,6 +116,9 @@ body{
 }
 .compras{
 	background-color: lightgrey;
+
+}
+.hide{
 
 }
 </style>
@@ -140,28 +144,17 @@ body{
 
 	<hr/>
 </div>
-<div class="container compras" >
-	<div class="row">
-		<div class="col-sm-4" id="compras0">
-			
-		</div>
-		<div class="col-sm-4" id="compras1">
-			
-		</div>
-		<div class="col-sm-4" id="compras2">
-			
-		</div>
-	</div>
-</div>
+
 
 <div class="container searcharea" >
 		<div class="row">
-		<div class="col-sm-4" >
+		<div class="col-sm-4" id="search1">
 			<p class="instrucciones">1-Añade productos a tu orden mediante el menú</p>
 			Buscar por palabra:<br>
-	<input type="text" id="myinput" style="width:100%;" class="rabi"/>
+	<input type="text" id="myinput" style="width:100%;" class="rabi"/><br><br><br>Visualizar solo compras:<br>
+			<div class="carrito" onclick="togglecar()"><img src="img/carrito.png" style="width:50px;"></div>
 		</div>
-		<div class="col-sm-4" >
+		<div class="col-sm-4" id="search2">
 			<p class="instrucciones">2-Completa la información de tu pedido:</p>
 			<br>
 			<form>
@@ -175,7 +168,11 @@ body{
 			    <!-- <small id="emailHelp" class="form-text text-muted">Nombre</small> -->
 			  </div>
 			  <div class="form-group">
-			    <input type="text" class="form-control rabi" id="direccion" aria-describedby="emailHelp" placeholder="DIRECCIÓN">
+			    <input type="text" class="form-control rabi" id="direccion" aria-describedby="adress" placeholder="DIRECCIÓN">
+			    <!-- <small id="emailHelp" class="form-text text-muted">Nombre</small> -->
+			  </div>
+			  <div class="form-group">
+			    <input type="text" class="form-control rabi" id="comentarios" aria-describedby="comments" placeholder="COMENTARIOS">
 			    <!-- <small id="emailHelp" class="form-text text-muted">Nombre</small> -->
 			  </div>
 			  <!-- <div class="form-check">
@@ -185,11 +182,11 @@ body{
 			  
 			</form>
 		</div>
-		<div class="col-sm-4" >
+		<div class="col-sm-4" id="search3">
 			<p class="instrucciones">3-Reviza tu total y ordena aquí</p>
 			<div class="row">
 				<div class="col-sm-6">
-					<div class="carrito"><img src="img/carrito.png" style="width:50px;"></div>
+					
 				</div>	
 				<div class="col-sm-6">
 					<div class="carrito2"><p style="font-size: 13pt;color:red;">total:</p><span id="sum">0</span> MXN </div>
@@ -269,6 +266,7 @@ body{
 <script type="text/javascript">
 _MENU={};
 _productos={};
+carselected=false;
 $(document).ready(function(){
 	getMenu()
 
@@ -323,7 +321,7 @@ function despliegaMenu(){
 	    		console.log(d_[1],"--")
 	    		if(d_[1].includes("1/2k")){min=".5"}
 	    		if(d_[1].includes("1/4k")){min=".25"}
-	    		trstr='<tr class="prow" id="'+d_[9]+'">\
+	    		trstr='<tr class="prow unselected" id="'+d_[9]+'">\
 		      <td>'+nomproducto+'</td>\
 		      <td>'+d_[5]+'</td>\
 		      <td>'+d_[1]+'</td>\
@@ -332,7 +330,7 @@ function despliegaMenu(){
 		    '</tr>'
 	    	}
 	    	else{
-	    		trstr='<tr class="prow" id="'+d_[9]+'">\
+	    		trstr='<tr class="prow unselected" id="'+d_[9]+'">\
 		      <td>'+nomproducto+'</td>\
 		      <td>'+d_[5]+'</td>\
 		      <td>'+d_[1]+'</td>\
@@ -346,14 +344,27 @@ function despliegaMenu(){
 	}
 	    
 }
-
+function togglecar(){
+	if(carselected){
+		$(".carrito").css("background-color","grey")
+		$(".unselected").toggle();
+		carselected=false;
+	}
+	else{
+		$(".carrito").css("background-color","cornflowerblue")
+		$(".unselected").toggle();
+		carselected=true;
+	}
+}
 function updateInput(ish, idrow){
 	_productos[idrow][1]=ish;
 	if(ish==0){
 		$("tr#"+idrow).css("background-color","white")
+		$("tr#"+idrow).removeClass( "unselected" );
 	}
 	else{
 		$("tr#"+idrow).css("background-color","skyblue")
+		$("tr#"+idrow).removeClass( "unselected" );
 	}
 	//console.log(_productos)
 	makesum()
@@ -373,7 +384,7 @@ function makesum(){
 		sum+=precio*cantidad;
 		if (cantidad>0) {
 			carro=item[0]+" - "+cantidad+" - "+(precio*cantidad);
-			$("#compras"+rem).append(carro);
+			//$("#compras"+rem).append(carro);
 			num+=1;
 		}
 		
@@ -386,7 +397,8 @@ function ordenar(){
 		form_name=$("#nombre").val();
 		form_telefono=$("#telefono").val();
 		form_direccion=$("#direccion").val();
-		orden={"nombre":form_name,"telefono":form_telefono,"dicreccion":form_direccion,"orden":_productos}
+		form_comentario=$("#comentarios").val();
+		orden={"nombre":form_name,"telefono":form_telefono,"dicreccion":form_direccion,"comentarios":form_comentario,"orden":_productos}
 		//console.log("_productos",JSON.stringify(orden));
 	        //var data = _productos;
 	        $.ajax({
@@ -397,6 +409,9 @@ function ordenar(){
         dataType: 'json',
         success: function (data){
 			console.log("DATA",data);
+			$("#search1").html('<h1>numero de orden: '+data.orden+'</h1>')
+			$("#search2").html('')
+			$("#search3").html('Tu pedido ha sido procesado! Para confirmar tu orden te pedimos enviar tu comprobante de pago y tu número de orden por whatsapp al teléfono: 5572117094')
 		}
     });
 

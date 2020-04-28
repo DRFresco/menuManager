@@ -41,7 +41,9 @@ Ubuntu 18.04
 SkyPunkG3d4tsu!
 N1rv4n4esley!!
 
-ssh gabo@199.244.51.123 
+ssh root@199.244.51.123 
+
+
 
 
 
