@@ -40,14 +40,20 @@ app.get('/hello', function (req, res) {
   res.sendFile(path.join(__dirname + '/sitio/staticindex.html'));
 });
 app.post('/orden', function (req, res) {
-  console.log(req.body);
-  fs.writeFile("ordenes/orden.json",JSON.stringify(req.body) , function(err) {
+  //console.log();
+  name=req.body["nombre"]+"__"+Math.floor(Math.random() * 100)+Math.floor(Date.now() / 60000);
+  fs.writeFile("ordenes/"+name+".json",JSON.stringify(req.body) , function(err) {
 	    if(err) {
 	        return console.log(err);
 	    }
-	    console.log("Orden procesada");
+	    else{
+	    	console.log("Orden "+name+" procesada");
+	    	//return name;
+	    	res.json({"orden":name});
+	    }
+	    
 	}); 
-  res.send("109987")
+  
 });
 
 

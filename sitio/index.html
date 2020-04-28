@@ -167,7 +167,7 @@ body{
 			<form>
 			  <div class="form-group">
 			    <label for="exampleInputEmail1"></label>
-			    <input type="email" class="form-control rabi" id="nombre" aria-describedby="emailHelp" placeholder="NOMBRE">
+			    <input type="text" class="form-control rabi" id="nombre" aria-describedby="emailHelp" placeholder="NOMBRE">
 			    <!-- <small id="emailHelp" class="form-text text-muted">Nombre</small> -->
 			  </div>
 			  <div class="form-group">
@@ -175,7 +175,7 @@ body{
 			    <!-- <small id="emailHelp" class="form-text text-muted">Nombre</small> -->
 			  </div>
 			  <div class="form-group">
-			    <input type="number" class="form-control rabi" id="direccion" aria-describedby="emailHelp" placeholder="DIRECCIÓN">
+			    <input type="text" class="form-control rabi" id="direccion" aria-describedby="emailHelp" placeholder="DIRECCIÓN">
 			    <!-- <small id="emailHelp" class="form-text text-muted">Nombre</small> -->
 			  </div>
 			  <!-- <div class="form-check">
@@ -289,6 +289,7 @@ function getMenu(){
   		if (this.readyState == 4 && this.status == 200) {
 	    var myObj = JSON.parse(this.responseText);
 	    _MENU=myObj;
+	    console.log(_MENU)
 	    despliegaMenu();
 	    
 	  	}
@@ -314,18 +315,32 @@ function despliegaMenu(){
 		// }
 		
 	    for(i=0;i<_MENU[entry].length;i++){
-
+	    	min=0;
 	    	d_=_MENU[entry][i];
-	    	nomproducto=d_[0].replace("[[[[[[[[[[[AGOTADO]]]]]]]]]]","").trim();
-	    	_productos[d_[9]]=[d_[0]+" | "+nomproductor,0,d_[5]]
-	    	
-	    	trstr='<tr class="prow" id="'+d_[9]+'">\
+	    	nomproducto=d_[0].replace("[[[[[[[[[[[AGOTADO]]]]]]]]]]","(AGOTADO)").trim();
+	    	_productos[d_[9]]=[d_[0]+" | "+nomproductor,0,d_[7]]
+	    	if(d_[1].includes("Kilo")){
+	    		console.log(d_[1],"--")
+	    		if(d_[1].includes("1/2k")){min=".5"}
+	    		if(d_[1].includes("1/4k")){min=".25"}
+	    		trstr='<tr class="prow" id="'+d_[9]+'">\
 		      <td>'+nomproducto+'</td>\
-		      <td>'+nomproductor+'</td>\
+		      <td>'+d_[5]+'</td>\
 		      <td>'+d_[1]+'</td>\
-		      <td>'+d_[5]+'</td>'+
+		      <td>'+d_[7]+'</td>'+
+		      '<td><input type="number" id="tentacles" onchange="updateInput(this.value,'+d_[9]+')" class="prInput" producer="" product="'+d_[0]+'" name="tentacles"min="0" step="'+min+'" ></td>'+
+		    '</tr>'
+	    	}
+	    	else{
+	    		trstr='<tr class="prow" id="'+d_[9]+'">\
+		      <td>'+nomproducto+'</td>\
+		      <td>'+d_[5]+'</td>\
+		      <td>'+d_[1]+'</td>\
+		      <td>'+d_[7]+'</td>'+
 		      '<td><input type="number" id="tentacles" onchange="updateInput(this.value,'+d_[9]+')" class="prInput" producer="" product="'+d_[0]+'" name="tentacles"min="0" ></td>'+
 		    '</tr>'
+	    	}
+	    	
 	    	$("#tabla_productos").append(trstr)
 	    }
 	}
@@ -365,18 +380,28 @@ function makesum(){
 	}
 	$("#sum").text(sum);
 }
+
 function ordenar(){
-		console.log("_productos",JSON.stringify(_productos));
+		orden={};
+		form_name=$("#nombre").val();
+		form_telefono=$("#telefono").val();
+		form_direccion=$("#direccion").val();
+		orden={"nombre":form_name,"telefono":form_telefono,"dicreccion":form_direccion,"orden":_productos}
+		//console.log("_productos",JSON.stringify(orden));
 	        //var data = _productos;
 	        $.ajax({
         url: '/orden',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify(_productos),
-        dataType: 'json'
+        data: JSON.stringify(orden),
+        dataType: 'json',
+        success: function (data){
+			console.log("DATA",data);
+		}
     });
 
 }
+
 </script>
 	
 </script>

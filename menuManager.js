@@ -5,7 +5,7 @@ var csv = require("fast-csv");
 
 exports.menu=function (callback){
 	menu={};
-	IN_file="menu/menuprueba.csv";
+	IN_file="menu/27-abril.csv";
 	rownum=0;
 	proovedor=""
 	csv
@@ -13,23 +13,16 @@ exports.menu=function (callback){
 	 .on("data", function(data){
 	 	rownum+=1;
 	 	data.push(rownum);
+
 	 	if(rownum==1){}
 	 	else{
-	 		if(data[2]==data[3]){
-	 			proovedor=data[0];
-	 			console.log(proovedor)
-	 			if(!menu[proovedor]){
-	 				menu[proovedor]=[];
-	 			}
-	 			
+	 		proovedor=data[5];
+	 		
+	 		
+	 		if(!menu[proovedor]){
+	 			menu[proovedor]=[];
 	 		}
-	 		else{
-	 			if(!menu[proovedor]){
-	 				menu[proovedor]=[];
-	 			}
-	 			menu[proovedor].push(data);
-	 			//menu=data+"\n";
-	 		}
+	 		menu[proovedor].push(data);
 	 	}
 	 		 	
 	 })	
