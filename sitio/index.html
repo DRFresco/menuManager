@@ -121,6 +121,11 @@ body{
 .hide{
 
 }
+.totalind{
+	font-family: monospace;
+	color: black;
+	font-size: 16pt;
+}
 </style>
 
 <body>
@@ -230,6 +235,8 @@ body{
 	      </th>
 	      <th class="th-sm">ordenar
 	      </th>
+	      <th class="th-sm">total por producto
+	      </th>
 	     
 	    </tr>
 	  	</thead>
@@ -245,19 +252,7 @@ body{
 		    
 		  </tbody>
 		  <tfoot>
-		    <tr>
-		      
-	      <th class="th-sm">Producto
-	      </th>
-	      <th class="th-sm">productor
-	      </th>
-	      <th class="th-sm">unidad
-	      </th>
-	      <th class="th-sm">precio
-	      </th>
-	      <th class="th-sm">ordenar
-	      </th>
-		    </tr>
+		    
 		  </tfoot>
 	</table>
 </div> <!-- ROW -->
@@ -327,6 +322,7 @@ function despliegaMenu(){
 		      <td>'+d_[1]+'</td>\
 		      <td>'+d_[7]+'</td>'+
 		      '<td><input type="number" id="tentacles" onchange="updateInput(this.value,'+d_[9]+')" class="prInput" producer="" product="'+d_[0]+'" name="tentacles"min="0" step="'+min+'" ></td>'+
+		      '<td class="totalind"></td>'+
 		    '</tr>'
 	    	}
 	    	else{
@@ -336,6 +332,7 @@ function despliegaMenu(){
 		      <td>'+d_[1]+'</td>\
 		      <td>'+d_[7]+'</td>'+
 		      '<td><input type="number" id="tentacles" onchange="updateInput(this.value,'+d_[9]+')" class="prInput" producer="" product="'+d_[0]+'" name="tentacles"min="0" ></td>'+
+		      '<td class="totalind">0</td>'+
 		    '</tr>'
 	    	}
 	    	
@@ -358,13 +355,17 @@ function togglecar(){
 }
 function updateInput(ish, idrow){
 	_productos[idrow][1]=ish;
+	precio=Number.parseFloat( _productos[idrow][2].replace("$","") );
 	if(ish==0){
 		$("tr#"+idrow).css("background-color","white")
 		$("tr#"+idrow).removeClass( "unselected" );
+		$("tr#"+idrow).find("td.totalind").html(0)
 	}
 	else{
 		$("tr#"+idrow).css("background-color","skyblue")
 		$("tr#"+idrow).removeClass( "unselected" );
+		totalind=Number.parseFloat(ish)*precio;
+		$("tr#"+idrow).find("td.totalind").html(totalind)
 	}
 	//console.log(_productos)
 	makesum()
