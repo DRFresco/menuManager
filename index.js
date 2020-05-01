@@ -17,16 +17,24 @@ app.use('/', express.static(__dirname + '/sitio'));
 app.use('/ordenes/', express.static(__dirname + '/ordenes'));
 
 
-
+menuManager.inicializa();
 
 //ORDENES
 
 //MENÚ
 app.get('/menu', function (req, res) {
-	menuManager.menu(function(menuR){
-		res.json(menuR);
-		//console.log(menuR);
-	});
+	if( !isEmpty(menuManager.liveMenu) ){
+		//console.log("live");
+		res.json(menuManager.liveMenu);
+	}
+	else{
+		menuManager.menu(function(menuR){
+			menuManager.updateCache(menuR);
+			res.json(menuR);
+			console.log("initializing...");
+		});
+	}
+	
 
 });
 
@@ -40,13 +48,16 @@ app.get('/hello', function (req, res) {
   res.sendFile(path.join(__dirname + '/sitio/staticindex.html'));
 });
 app.post('/orden', function (req, res) {
-  //console.log();
+  //console.log(req.body);
   name=req.body["nombre"].substring(0,4)+"__"+Math.floor(Math.random() * 100)+Math.floor(Date.now() / 60000);
   fs.writeFile("ordenes/"+name+".json",JSON.stringify(req.body) , function(err) {
 	    if(err) {
 	        return console.log(err);
 	    }
 	    else{
+	    	menuManager.actualiza(req.body.orden,function(){
+	    		menuManager.updateCache(menuManager.liveMenu);
+	    	});
 	    	console.log("Orden "+name+" procesada");
 	    	//return name;
 	    	res.json({"orden":name});
@@ -63,3 +74,12 @@ app.post('/orden', function (req, res) {
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
+
+
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}

@@ -137,12 +137,12 @@ body{
 			<br>
 			<h5 style="color:black;"> @ciudad_silvestre nace con el objetivo de vincular a productores de zonas aledañas a la Ciudad de México con redes de consumo con interés en productos de alta calidad y en trazabilidad de producción.</h5>
 			<br>
-			<input type="button" value="¿Cómo funciona?" name=""/>
+			<!-- <input type="button" value="¿Cómo funciona?" name=""/> -->
 		</div>
 		<div class="col-sm-6">
 			<img src="img/logo.png" class="logo">
 			<hr>
-			<h4 style="color:#49a954;">Menú para la semana del 14/abril al 21/abril del 2020</h4>
+			<h4 style="color:#49a954;">Menú para la semana del 01/mayo al 05/mayo del 2020</h4>
 		</div>
 	</div>
 
@@ -155,9 +155,10 @@ body{
 		<div class="row">
 		<div class="col-sm-4" id="search1">
 			<p class="instrucciones">1-Añade productos a tu orden mediante el menú</p>
+			Visualizar solo compras:<br>
+			<div class="carrito" onclick="togglecar()"><img src="img/carrito.png" style="width:50px;"></div><br><br>
 			Buscar por palabra:<br>
-	<input type="text" id="myinput" style="width:100%;" class="rabi"/><br><br><br>Visualizar solo compras:<br>
-			<div class="carrito" onclick="togglecar()"><img src="img/carrito.png" style="width:50px;"></div>
+	<input type="text" id="myinput" style="width:100%;" class="rabi"/><br>
 		</div>
 		<div class="col-sm-4" id="search2">
 			<p class="instrucciones">2-Completa la información de tu pedido:</p>
@@ -188,22 +189,36 @@ body{
 			</form>
 		</div>
 		<div class="col-sm-4" id="search3">
-			<p class="instrucciones">3-Reviza tu total y ordena aquí</p>
+			<p class="instrucciones">3-Reviza tu zona de envío y ordena aquí</p>
+			
 			<div class="row">
 				<div class="col-sm-6">
-					
+					<input type="radio" name="zona" id="zona2" value="0"> recojer el pedido personalmente: $0<br>
+					<input checked="checked" type="radio" name="zona" id="zona1" value="30"> Verde: $30<br>
+					<input type="radio" name="zona" id="zona2" value="80"> amarilla: $80<br>
+					<input type="radio" name="zona" id="zona3" value="140"> roja: $140 
 				</div>	
 				<div class="col-sm-6">
-					<div class="carrito2"><p style="font-size: 13pt;color:red;">total:</p><span id="sum">0</span> MXN </div>
+					<a style="font-size:20pt; color:wheat;" href="https://www.google.com/maps/d/viewer?mid=1nFVS9-qWElMCTQWsoXsSD6tjGZ-3hC8-&ll=19.372279482750603%2C-99.19043649999998&z=12" target="_blank">Ver mapa:
+						<br>
+						<img src="img/mapa.png" style="height: 50%;">
+					</a>
 			
 				</div>
 			</div>
-
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="carrito2"><p style="font-size: 13pt;color:red;">total:</p><span id="sum">0</span> MXN </div>
+				</div>
+				<div class="col-sm-6">
+					<div class="ordenar" onclick="ordenar();">ordenar</div>
+				</div>
+			</div>
 			
 			
 			
 			<br>
-			<div class="ordenar" onclick="ordenar();">ordenar</div>
+			
 			
 			<!-- Buscar por Producto:<br>
 	<select id="cars">
@@ -228,6 +243,8 @@ body{
 	      <th class="th-sm">Producto
 	      </th>
 	      <th class="th-sm">productor
+	      </th>
+	      <th class="th-sm">existencia
 	      </th>
 	      <th class="th-sm">unidad
 	      </th>
@@ -263,7 +280,8 @@ _MENU={};
 _productos={};
 carselected=false;
 $(document).ready(function(){
-	getMenu()
+	makesum();
+	getMenu();
 
 
 	  $("#myinput").on("keyup", function() {
@@ -271,6 +289,9 @@ $(document).ready(function(){
 	    $("#myTable tr").filter(function() {
 	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 	    });
+	  });
+	  $('input:radio[name=zona]').on("click", function() {
+	    makesum();
 	  });
 
 });
@@ -292,10 +313,11 @@ function getMenu(){
 }
 
 function despliegaMenu(){
+
 	productores=[];
 
 	for(entry in _MENU){
-
+		originalname=entry;
 		nomnew=entry.split("(");
 		redes="-";
 		nomproductor=nomnew[0].trim();
@@ -311,7 +333,7 @@ function despliegaMenu(){
 	    	min=0;
 	    	d_=_MENU[entry][i];
 	    	nomproducto=d_[0].replace("[[[[[[[[[[[AGOTADO]]]]]]]]]]","(AGOTADO)").trim();
-	    	_productos[d_[9]]=[d_[0]+" | "+nomproductor,0,d_[7]]
+	    	_productos[d_[9]]=[d_[0]+"[|]"+originalname,0,d_[7]]
 	    	if(d_[1].includes("Kilo")){
 	    		console.log(d_[1],"--")
 	    		if(d_[1].includes("1/2k")){min=".5"}
@@ -319,9 +341,10 @@ function despliegaMenu(){
 	    		trstr='<tr class="prow unselected" id="'+d_[9]+'">\
 		      <td>'+nomproducto+'</td>\
 		      <td>'+d_[5]+'</td>\
+		      <td>'+d_[3]+'</td>\
 		      <td>'+d_[1]+'</td>\
 		      <td>'+d_[7]+'</td>'+
-		      '<td><input type="number" id="tentacles" onchange="updateInput(this.value,'+d_[9]+')" class="prInput" producer="" product="'+d_[0]+'" name="tentacles"min="0" step="'+min+'" ></td>'+
+		      '<td><input type="number" max="'+d_[3]+'" id="tentacles" onchange="updateInput(this.value,'+d_[9]+')" class="prInput" producer="" product="'+d_[0]+'" name="tentacles"min="0" step="'+min+'" ></td>'+
 		      '<td class="totalind"></td>'+
 		    '</tr>'
 	    	}
@@ -329,9 +352,10 @@ function despliegaMenu(){
 	    		trstr='<tr class="prow unselected" id="'+d_[9]+'">\
 		      <td>'+nomproducto+'</td>\
 		      <td>'+d_[5]+'</td>\
+		      <td>'+d_[3]+'</td>\
 		      <td>'+d_[1]+'</td>\
 		      <td>'+d_[7]+'</td>'+
-		      '<td><input type="number" id="tentacles" onchange="updateInput(this.value,'+d_[9]+')" class="prInput" producer="" product="'+d_[0]+'" name="tentacles"min="0" ></td>'+
+		      '<td><input type="number" max="'+d_[3]+'" id="tentacles" onchange="updateInput(this.value,'+d_[9]+')" class="prInput" producer="" product="'+d_[0]+'" name="tentacles"min="0" ></td>'+
 		      '<td class="totalind">0</td>'+
 		    '</tr>'
 	    	}
@@ -374,6 +398,8 @@ function updateInput(ish, idrow){
 function makesum(){
 	num=0;
 	sum=0;
+	envio=Number.parseFloat($('input:radio[name=zona]:checked').val() );
+	sum+=envio;
 	$("#compras0").html("");
 	$("#compras1").html("");
 	$("#compras2").html("");
@@ -399,7 +425,8 @@ function ordenar(){
 		form_telefono=$("#telefono").val();
 		form_direccion=$("#direccion").val();
 		form_comentario=$("#comentarios").val();
-		orden={"nombre":form_name,"telefono":form_telefono,"dicreccion":form_direccion,"comentarios":form_comentario,"orden":_productos}
+		envio=Number.parseFloat($('input:radio[name=zona]:checked').val() );
+		orden={"nombre":form_name,"telefono":form_telefono,"dicreccion":form_direccion,"comentarios":form_comentario,"costo_envio":envio,"orden":_productos}
 		//console.log("_productos",JSON.stringify(orden));
 	        //var data = _productos;
 	        $.ajax({
