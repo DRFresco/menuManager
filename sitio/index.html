@@ -98,6 +98,7 @@ body{
 }
 .ordenar:hover{
 	background-color: white;
+	color:black;
 }
 .total_title{
 	font-size: 26pt;
@@ -125,6 +126,43 @@ body{
 	font-family: monospace;
 	color: black;
 	font-size: 16pt;
+}
+.button-p {
+    margin: 0 0 0 5px;
+    text-indent: -9999px;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    float: left;
+    text-align: center;
+    background: url(img/plus.png) no-repeat;
+    background-size: cover;
+}
+.button-m {
+    margin: 0 0 0 5px;
+    text-indent: -9999px;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    float: left;
+    text-align: center;
+    background: url(img/minus.png) no-repeat;
+    background-size: cover;
+}
+.inputsmall{
+	float: left;
+    width: 60px;
+    font: 700 20px Helvetica,sans-serif;
+    padding: 3px 0 0;
+}
+.mapa{
+	 border-radius: 25px;
+  border: 2px solid dimgrey;
+  padding: 20px;
+  cursor: pointer;
+  box-shadow: 3px 3px #5049a9;
+  background-color: white;
+  color:black;
 }
 </style>
 
@@ -199,9 +237,9 @@ body{
 					<input type="radio" name="zona" id="zona3" value="140"> roja: $140 
 				</div>	
 				<div class="col-sm-6">
-					<a style="font-size:20pt; color:wheat;" href="https://www.google.com/maps/d/viewer?mid=1nFVS9-qWElMCTQWsoXsSD6tjGZ-3hC8-&ll=19.372279482750603%2C-99.19043649999998&z=12" target="_blank">Ver mapa:
+					<a class="mapa" style="font-size:11pt;" href="https://www.google.com/maps/d/viewer?mid=1nFVS9-qWElMCTQWsoXsSD6tjGZ-3hC8-&ll=19.372279482750603%2C-99.19043649999998&z=12" target="_blank">Ver mapa
 						<br>
-						<img src="img/mapa.png" style="height: 50%;">
+						<!-- <img src="img/mapa.png" style="height: 50%;"> -->
 					</a>
 			
 				</div>
@@ -328,6 +366,8 @@ function despliegaMenu(){
 		// 	redes=nomnew[1].replace(")","");
 		// 	nomproductor='<a href="'+'https://www.instagram.com/'+nomproductor.replace("@","")+'" target="_blank">'+nomproductor+'</a>'
 		// }
+		buttons='';
+
 		
 	    for(i=0;i<_MENU[entry].length;i++){
 	    	min=0;
@@ -344,8 +384,8 @@ function despliegaMenu(){
 		      <td>'+d_[3]+'</td>\
 		      <td>'+d_[1]+'</td>\
 		      <td>'+d_[7]+'</td>'+
-		      '<td><input type="number" max="'+d_[3]+'" id="tentacles" onchange="updateInput(this.value,'+d_[9]+')" class="prInput" producer="" product="'+d_[0]+'" name="tentacles"min="0" step="'+min+'" ></td>'+
-		      '<td class="totalind"></td>'+
+		      '<td style="min-width:200px;background-color:#ffffff;"><div class="inc button-m">+</div><input value="0" type="number" max="'+d_[3]+'" id="tentacles" idrow="'+d_[9]+'" onchange="updateInput(this.value,'+d_[9]+')" class="prInput inputsmall" producer="" product="'+d_[0]+'" name="tentacles"min="0" step="'+min+'" ><div class="plu button-p">-</div></td>'+
+		      '<td class="totalind">0</td>'+
 		    '</tr>'
 	    	}
 	    	else{
@@ -355,16 +395,47 @@ function despliegaMenu(){
 		      <td>'+d_[3]+'</td>\
 		      <td>'+d_[1]+'</td>\
 		      <td>'+d_[7]+'</td>'+
-		      '<td><input type="number" max="'+d_[3]+'" id="tentacles" onchange="updateInput(this.value,'+d_[9]+')" class="prInput" producer="" product="'+d_[0]+'" name="tentacles"min="0" ></td>'+
+		      '<td style="min-width:200px;background-color:#ffffff;"><div class="inc button-m">+</div><input value="0"  type="number" max="'+d_[3]+'" id="tentacles" idrow="'+d_[9]+'" onchange="updateInput(this.value,'+d_[9]+')" class=" inputsmall" producer="" step="1" product="'+d_[0]+'" name="tentacles"min="0" disabled><div class="plu button-p">-</div></td>'+
 		      '<td class="totalind">0</td>'+
 		    '</tr>'
 	    	}
 	    	
 	    	$("#tabla_productos").append(trstr)
 	    }
+
 	}
+	initB();
 	    
 }
+function initB(){
+
+	$(".button-p").on("click", function() {
+		step=Number.parseFloat ( $(this).parent().find("input").attr("step") );
+		actual=Number.parseFloat ( $(this).parent().find("input").val() );
+		max=Number.parseFloat ( $(this).parent().find("input").attr("max") );
+		idrow= $(this).parent().find("input").attr("idrow") ;
+		if(actual+step <= max){
+			$(this).parent().find("input").val(actual+step);
+		}
+		updateInput($(this).parent().find("input").val(), idrow);
+		//makesum();
+		console.log("plus",step)
+	});
+	$(".button-m").on("click", function() {
+		step=Number.parseFloat ( $(this).parent().find("input").attr("step") );
+		actual=Number.parseFloat ( $(this).parent().find("input").val() );
+		idrow= $(this).parent().find("input").attr("idrow") ;
+		if(actual-step >= 0){
+			$(this).parent().find("input").val(actual-step);
+		}
+		updateInput($(this).parent().find("input").val(), idrow);
+		//makesum();
+	});
+
+
+}
+
+
 function togglecar(){
 	if(carselected){
 		$(".carrito").css("background-color","grey")
@@ -425,8 +496,9 @@ function ordenar(){
 		form_telefono=$("#telefono").val();
 		form_direccion=$("#direccion").val();
 		form_comentario=$("#comentarios").val();
+		form_total=$("#sum").val();
 		envio=Number.parseFloat($('input:radio[name=zona]:checked').val() );
-		orden={"nombre":form_name,"telefono":form_telefono,"dicreccion":form_direccion,"comentarios":form_comentario,"costo_envio":envio,"orden":_productos}
+		orden={"nombre":form_name, "total":form_total,"telefono":form_telefono,"dicreccion":form_direccion,"comentarios":form_comentario,"costo_envio":envio,"orden":_productos}
 		//console.log("_productos",JSON.stringify(orden));
 	        //var data = _productos;
 	        $.ajax({

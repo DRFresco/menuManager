@@ -42,6 +42,7 @@ SkyPunkG3d4tsu!
 N1rv4n4esley!!
 
 ssh root@199.244.51.123 
+rm -rf /root/orion/menuManager/ordenes
 
 
 
