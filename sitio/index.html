@@ -496,7 +496,7 @@ function ordenar(){
 		form_telefono=$("#telefono").val();
 		form_direccion=$("#direccion").val();
 		form_comentario=$("#comentarios").val();
-		form_total=$("#sum").val();
+		form_total=$("#sum").html();
 		envio=Number.parseFloat($('input:radio[name=zona]:checked').val() );
 		orden={"nombre":form_name, "total":form_total,"telefono":form_telefono,"dicreccion":form_direccion,"comentarios":form_comentario,"costo_envio":envio,"orden":_productos}
 		//console.log("_productos",JSON.stringify(orden));
