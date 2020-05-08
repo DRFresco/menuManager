@@ -100,6 +100,43 @@ body{
 	background-color: white;
 	color:black;
 }
+.checkout{
+
+	font-size: 15pt;
+    width: 100%;
+    padding-left: 10%;
+    text-align: center;
+        background-color: slategrey;
+    color: white;
+    border-radius: 25px;
+  border: 2px solid dimgrey;
+  padding: 20px;
+  cursor: pointer;
+  box-shadow: 3px 3px #5049a9;
+  
+}
+.checkout:hover{
+	background-color: white;
+	color:black;
+}
+.regresar{
+	font-size: 15pt;
+    width: 100%;
+    padding-left: 10%;
+    text-align: center;
+        background-color: slategrey;
+    color: white;
+    border-radius: 25px;
+  border: 2px solid dimgrey;
+  padding: 20px;
+  cursor: pointer;
+  box-shadow: 3px 3px #5049a9;
+  
+}
+.regresar:hover{
+	background-color: white;
+	color:black;
+}
 .total_title{
 	font-size: 26pt;
     width: 80%;
@@ -164,6 +201,13 @@ body{
   background-color: white;
   color:black;
 }
+.splash{
+	display: none;
+	background-color: white;
+	width:100%;
+	padding:20px;
+	/*height:400px;*/
+}
 </style>
 
 <body>
@@ -227,7 +271,7 @@ body{
 			</form>
 		</div>
 		<div class="col-sm-4" id="search3">
-			<p class="instrucciones">3-Reviza tu zona de envío y ordena aquí</p>
+			<p class="instrucciones">3-Reviza tu zona de envío y haz el checkout</p>
 			
 			<div class="row">
 				<div class="col-sm-6">
@@ -249,7 +293,7 @@ body{
 					<div class="carrito2"><p style="font-size: 13pt;color:red;">total:</p><span id="sum">0</span> MXN </div>
 				</div>
 				<div class="col-sm-6">
-					<div class="ordenar" onclick="ordenar();">ordenar</div>
+					<div class="ordenar" onclick="checkout();">ckeckout</div>
 				</div>
 			</div>
 			
@@ -271,6 +315,30 @@ body{
 	</div>	
 </div>	
 <hr/>
+<div class="container splash" >
+	<div class="regresar" onclick="regresar();">regresar al menú</div>
+	<p>Tenemos DOS formas de pago:</p>
+	<ul>
+		<li>Por PAYPAL: pablo@colectivoaxolote.mx</li>
+		<li>Por transferencia: CLABE: 012180001943749597| BANCOMER | CUENTA: 0194374959 |BENEFICIARIO: COLECTIVO ATL-XOLOTL S.A. DE C.V.</li>
+	</ul>
+<p>
+Al momento de llenar tu hoja de pedido completa tu pago y envía el comprobante de pago por WHATSAPP (55)72117094:"</p>						
+<p>Cada Jueves  se recibe tu canasta en nuestro almacén, tenemos dos métodos de entrega:</p>
+<ul>
+	<li>recolección en persona: a partir de las 16h en Amsterdam 46, Hipódromo, Cuauhtémoc, 06100, Ciudad de México</li>
+	<li>entrega a domicilio: selecciona la opción y agrega tu dirección de envío. Las entregas comienzan a las 13h <br>	
+	El costo puede variar por área , revisa en nuestro el link https://bit.ly/2WIH79Q  o pregunta por whatsapp</li>
+</ul>
+<h1>TOTAL:</h1>
+<h2 style="color:red;" id="confirmatotal"></h2>
+<div id="avisofinal"></div>
+<h1 id="numorden"></h1>
+<br>
+<hr>
+<div class="ordenar" onclick="ordenar();">ordenar</div>
+</div>
+
 <div class="container" id="table_cont" >
 <div class="row"></div>
 <div class="row">
@@ -416,8 +484,9 @@ function initB(){
 		idrow= $(this).parent().find("input").attr("idrow") ;
 		if(actual+step <= max){
 			$(this).parent().find("input").val(actual+step);
+			updateInput($(this).parent().find("input").val(), idrow);
 		}
-		updateInput($(this).parent().find("input").val(), idrow);
+		
 		//makesum();
 		console.log("plus",step)
 	});
@@ -427,8 +496,9 @@ function initB(){
 		idrow= $(this).parent().find("input").attr("idrow") ;
 		if(actual-step >= 0){
 			$(this).parent().find("input").val(actual-step);
+			updateInput($(this).parent().find("input").val(), idrow);
 		}
-		updateInput($(this).parent().find("input").val(), idrow);
+		
 		//makesum();
 	});
 
@@ -489,7 +559,25 @@ function makesum(){
 	}
 	$("#sum").text(sum);
 }
-
+function checkout(){
+	form_name=$("#nombre").val();
+		form_telefono=$("#telefono").val();
+		form_direccion=$("#direccion").val();
+		form_comentario=$("#comentarios").val();
+		form_total=$("#sum").html();
+		envio=Number.parseFloat($('input:radio[name=zona]:checked').val() );
+		orden={"nombre":form_name, "total":form_total,"telefono":form_telefono,"dicreccion":form_direccion,"comentarios":form_comentario,"costo_envio":envio,"orden":_productos}
+		$("#confirmatotal").text("$"+form_total+"  MXN");
+		$("#table_cont").fadeOut();
+		$(".splash").fadeIn();
+		$(".searcharea").fadeOut();
+}
+function regresar(){
+	
+		$("#table_cont").fadeIn();
+		$(".splash").fadeOut();
+		$(".searcharea").fadeIn();
+}
 function ordenar(){
 		$(".ordenar").hide();
 		orden={};
@@ -510,9 +598,12 @@ function ordenar(){
         dataType: 'json',
         success: function (data){
 			console.log("DATA",data);
-			$("#search1").html('<h1>numero de orden: '+data.orden+'</h1>')
-			$("#search2").html('')
-			$("#search3").html('Tu pedido ha sido procesado! Para confirmar tu orden te pedimos enviar tu comprobante de pago y tu número de orden por whatsapp al teléfono: 5572117094')
+			$("#avisofinal").text('Tu pedido ha sido procesado! Para confirmar tu orden te pedimos enviar tu comprobante de pago y tu número de orden por whatsapp al teléfono: 5572117094');
+			$("#numorden").text("Número de orden: "+data.orden);
+			$(".regresar").hide();
+			// $("#search1").html('<h1>numero de orden: '+data.orden+'</h1>')
+			// $("#search2").html('')
+			// $("#search3").html('Tu pedido ha sido procesado! Para confirmar tu orden te pedimos enviar tu comprobante de pago y tu número de orden por whatsapp al teléfono: 5572117094')
 		}
     });
 
