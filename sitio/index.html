@@ -13,7 +13,7 @@
 	<title>Ciudad Silvestre</title>
 </head>
 <style type="text/css">
-/*	table.dataTable thead .sorting:after,
+	table.dataTable thead .sorting:after,
 table.dataTable thead .sorting:before,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_asc:before,
@@ -24,7 +24,7 @@ table.dataTable thead .sorting_desc:before,
 table.dataTable thead .sorting_desc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:before {
   bottom: .5em;
-}*/
+}
 body{
 	background: url("img/jitomate.jpg");
 	background-size: cover;
@@ -225,7 +225,10 @@ body{
 		<div class="col-sm-6">
 			<img src="img/logo.png" class="logo">
 			<hr>
-			<h4 style="color:#49a954;">Lista de la semana 11/mayo. El pedido debe ser completado y pagado antes de las 10 am del martes 12</h4>
+			<span style="color:#49a954;">Lista de la semana 11/mayo
+<br>
+- El pedido debe ser completado y pagado antes de las 10 am del martes 12.<br>
+- La entrega se realiza el jueves 14 <br>- Actualiza el navegador antes de llenar tu pedido para garantizar que es el inventario actualizado. 	</span>
 		</div>
 	</div>
 
@@ -241,7 +244,7 @@ body{
 			
 		</div> -->
 		<div class="col-sm-4" id="search2">
-			<p class="instrucciones">2-Completa la información de tu pedido:</p>
+			<p class="instrucciones">Completa la información de tu pedido:</p>
 			<br>
 			<form>
 			  <div class="form-group">
@@ -269,7 +272,7 @@ body{
 			</form>
 		</div>
 		<div class="col-sm-4" id="search3">
-			<p class="instrucciones">3-Reviza tu zona de envío y haz el checkout</p>
+			<p class="instrucciones">Reviza tu zona de envío y haz el checkout</p>
 			
 			<div class="row">
 				<div class="col-sm-6">
@@ -293,7 +296,7 @@ body{
 			<br>
 
 		</div>
-		<div class="col-sm-4" id="search3">
+		<div class="col-sm-4" id="search3" style="padding: 30px;">
 			<div class="row">
 				
 					<div class="carrito2"><p style="font-size: 13pt;color:red;">total:</p><span id="sum">0</span> Pesos </div>
@@ -315,23 +318,33 @@ body{
 
 
 	<div class="regresar" onclick="regresar();">regresar al menú</div>
-	<p>Tenemos DOS formas de pago:</p>
+	<br>
+	<h3>Información de contacto:</h3>
+<h4 style="color:red;" id="confirmainfo"></h4>
+<h4>TOTAL:</h4>
+<h4 style="color:red;" id="confirmatotal"></h4>
+	
+	<hr>
+	<p>Si quieres revisar nuevamente tu pedido, puedes utilizar el botón de “regresa al menú” y usar el botón de vizualisar pedido. </p>
+	<hr>
+
+	<h4>Siguientes pasos:</h4>
 	<ul>
-		<li>Por PAYPAL: pablo@colectivoaxolote.mx</li>
-		<li>Por transferencia: CLABE: 012180001943749597| BANCOMER | CUENTA: 0194374959 |BENEFICIARIO: COLECTIVO ATL-XOLOTL S.A. DE C.V.</li>
+		<li>1.    COMPLETA TU ORDEN DANDO CLICK EN EL BOTON VERDE DE ABAJO: Si no lo haces, tus productos no serán apartados y puedes quedarte sin ellos</li>
+		<li>2.    REALIZA TU PAGO: contamos con dos métodos:<br>
+- Por PAYPAL: pablo@colectivoaxolote.mxbr <br>
+- Por transferencia: CLABE: 012180001943749597| BANCOMER | CUENTA: 0194374959 |BENEFICIARIO: COLECTIVO ATL-XOLOTL S.A. DE C.V.</li>
+		<li> 3.    ENVÍA TU COMPROBANTE DE PAGO Y # DE ORDEN A NUESTRO WHATSAPP 5572117094
+
+</li>
 	</ul>
-<p>
-Al momento de llenar tu hoja de pedido completa tu pago y envía el comprobante de pago por WHATSAPP (55)72117094:"</p>						
-<p>Cada Jueves  se recibe tu canasta en nuestro almacén, tenemos dos métodos de entrega:</p>
-<ul>
-	<li>recolección en persona: a partir de las 16h en Amsterdam 46, Hipódromo, Cuauhtémoc, 06100, Ciudad de México</li>
-	<li>entrega a domicilio: selecciona la opción y agrega tu dirección de envío. Las entregas comienzan a las 13h <br>	
-	El costo puede variar por área , revisa en nuestro el link https://bit.ly/2WIH79Q  o pregunta por whatsapp</li>
-</ul>
-<h1>Información de contacto:</h1>
-<h2 style="color:red;" id="confirmainfo"></h2>
-<h1>TOTAL:</h1>
-<h2 style="color:red;" id="confirmatotal"></h2>
+	
+<h5>Los envíos se entregan el día jueves de cada semana. En caso de recolección en Ámsterdam 46, el pedido estará listo a partir de las 16:00 hrs.</h5>
+    
+<hr>
+   
+
+
 <div id="avisofinal"></div>
 <h1 id="numorden"></h1>
 <br>

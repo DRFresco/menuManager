@@ -11,6 +11,7 @@ var csv = require("fast-csv");
 
 exports.liveMenu={};
 exports.cache=false;
+exports.currentMenu="menu10mayo";
 exports.inicializa=function (){
 	isCached=getMostRecentFileName("menu/workingcopy");
 	if(isCached!="menu.json"){
@@ -49,7 +50,7 @@ exports.updateCache=function (cache){
 }
 exports.menu=function (callback){
 	menu={};
-	IN_file="menu/11-mayo.csv";
+	IN_file="menu/"+this.currentMenu+".csv";
 	rownum=0;
 	proovedor="";
 	csv
@@ -113,7 +114,11 @@ exports.actualiza=function (orden,callback){
 
 
 
-
+exports.getOrden= function(orden,callback){
+	
+	orden = JSON.parse(fs.readFileSync('ordenes/'+orden+".json", 'utf8'));
+	callback(orden);
+}
 
 exports.getOrdenes= function(callback){
 	

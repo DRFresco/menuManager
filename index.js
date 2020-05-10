@@ -20,7 +20,34 @@ app.use('/ordenes/', express.static(__dirname + '/ordenes'));
 menuManager.inicializa();
 
 //ORDENES
+app.post('/orden', function (req, res) {
+  //console.log(req.body);
+  name=req.body["nombre"].substring(0,4)+"__"+Math.floor(Math.random() * 100)+Math.floor(Date.now() / 60000);
+  fs.writeFile("ordenes/"+name+".json",JSON.stringify(req.body) , function(err) {
+	    if(err) {
+	        return console.log(err);
+	    }
+	    else{
+	    	menuManager.actualiza(req.body.orden,function(){
+	    		menuManager.updateCache(menuManager.liveMenu);
+	    	});
+	    	console.log("Orden "+name+" procesada");
+	    	//return name;
+	    	res.json({"orden":name});
+	    }
+	    
+	}); 
+  
+});
+app.post('/ordenview', function (req, res) {
+  //console.log(req.body);
+  nombreorden=req.body["nombre"];
+  menuManager.getOrden(nombreorden, function(orden){
+  		res.json(orden);
+  });
+});
 app.get('/ordenes', function (req, res) {
+
   menuManager.getOrdenes(function(ordenes){
   		res.json(ordenes);
 		console.log("corte de caja...");
@@ -48,29 +75,15 @@ app.get('/', function (req, res) {
 	res.sendFile(path.join(__dirname + '/sitio/index.html'));
 
 });
+app.get('/orden', function (req, res) {
+	res.sendFile(path.join(__dirname + '/sitio/orderview.html'));
+
+});
 //TEST
 app.get('/hello', function (req, res) {
   res.sendFile(path.join(__dirname + '/sitio/staticindex.html'));
 });
-app.post('/orden', function (req, res) {
-  //console.log(req.body);
-  name=req.body["nombre"].substring(0,4)+"__"+Math.floor(Math.random() * 100)+Math.floor(Date.now() / 60000);
-  fs.writeFile("ordenes/"+name+".json",JSON.stringify(req.body) , function(err) {
-	    if(err) {
-	        return console.log(err);
-	    }
-	    else{
-	    	menuManager.actualiza(req.body.orden,function(){
-	    		menuManager.updateCache(menuManager.liveMenu);
-	    	});
-	    	console.log("Orden "+name+" procesada");
-	    	//return name;
-	    	res.json({"orden":name});
-	    }
-	    
-	}); 
-  
-});
+
 
 
 //PUERTO
