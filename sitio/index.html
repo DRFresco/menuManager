@@ -457,10 +457,10 @@ function despliegaMenu(){
 	    	d_=_MENU[entry][i];
 	    	nomproducto=d_[0].replace("[[[[[[[[[[[AGOTADO]]]]]]]]]]","(AGOTADO)").trim();
 	    	_productos[d_[9]]=[d_[0]+"[|]"+originalname,0,d_[7]]
-	    	if(d_[1].includes("Kilo")){
+	    	if(d_[1].includes("/")){
 	    		console.log(d_[1],"--")
-	    		if(d_[1].includes("1/2k")){min=".5"}
-	    		if(d_[1].includes("1/4k")){min=".25"}
+	    		if(d_[1].includes("1/2")){min=".5"}
+	    		if(d_[1].includes("1/4")){min=".25"}
 	    		trstr='<tr class="prow unselected" id="'+d_[9]+'">\
 		      <td>'+d_[5]+'</td>\
 		      <td>'+nomproducto+'</td>\
