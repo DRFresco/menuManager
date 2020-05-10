@@ -115,9 +115,14 @@ exports.actualiza=function (orden,callback){
 
 
 exports.getOrden= function(orden,callback){
+	if (fs.existsSync('ordenes/'+orden+".json")) {
+    	orden = JSON.parse(fs.readFileSync('ordenes/'+orden+".json", 'utf8'));
+		callback(orden);
+  	}
+  	else{
+  		callback({});
+  	}
 	
-	orden = JSON.parse(fs.readFileSync('ordenes/'+orden+".json", 'utf8'));
-	callback(orden);
 }
 
 exports.getOrdenes= function(callback){
