@@ -629,7 +629,7 @@ function ordenar(){
         dataType: 'json',
         success: function (data){
 			console.log("DATA",data);
-			$("#avisofinal").text('Tu pedido ha sido procesado! Para confirmar tu orden te pedimos enviar tu comprobante de pago y tu número de orden por whatsapp al teléfono: 5572117094. Si deseas visualizar tu pedido, entra al siguiente link: <a href="www.ciudadsilvestre.mx/orden" tagret="_blank">www.ciudadsilvestre.mx/orden</a>');
+			$("#avisofinal").html('<p>Tu pedido ha sido procesado! Para confirmar tu orden te pedimos enviar tu comprobante de pago y tu número de orden por whatsapp al teléfono: 5572117094.</p> <p>Si deseas visualizar tu pedido, entra al siguiente link: <a href="www.ciudadsilvestre.mx/orden" tagret="_blank">www.ciudadsilvestre.mx/orden</a></p>');
 			$("#numorden").text("Número de orden: "+data.orden);
 			$(".regresar").hide();
 			// $("#search1").html('<h1>numero de orden: '+data.orden+'</h1>')
