@@ -87,7 +87,7 @@ body{
     width: 100%;
     padding-left: 10%;
     text-align: center;
-        background-color: slategrey;
+        background-color: #49a954;
     color: white;
     border-radius: 25px;
   border: 2px solid dimgrey;
@@ -302,7 +302,7 @@ body{
 			</div>
 			<br><br><br>
 			<div class="row">
-					<div class="ordenar" onclick="checkout();">ckeckout</div>
+					<div class="checkout" onclick="checkout();">ckeckout</div>
 			</div>
 		</div>
 	</div>
@@ -336,7 +336,7 @@ Al momento de llenar tu hoja de pedido completa tu pago y envía el comprobante 
 <h1 id="numorden"></h1>
 <br>
 <hr>
-<div class="ordenar" onclick="ordenar();">ordenar</div>
+<div class="ordenar" onclick="ordenar();">COMPLETAR ORDEN</div>
 </div>
 
 <div class="container" id="table_cont" >
@@ -584,15 +584,15 @@ function checkout(){
 		orden={"nombre":form_name, "total":form_total,"telefono":form_telefono,"dicreccion":form_direccion,"comentarios":form_comentario,"costo_envio":envio,"orden":_productos}
 		$("#confirmainfo").text(form_name+" , "+form_direccion+" , "+form_telefono+" , ");
 		$("#confirmatotal").text("$"+form_total+"  Pesos");
-		$("#table_cont").fadeOut();
-		$(".splash").fadeIn();
-		$(".searcharea").fadeOut();
+		$("#table_cont").hide();
+		$(".splash").show();
+		$(".searcharea").hide();
 }
 function regresar(){
 		
-		$("#table_cont").fadeIn();
-		$(".splash").fadeOut();
-		$(".searcharea").fadeIn();
+		$("#table_cont").show();
+		$(".splash").hide();
+		$(".searcharea").show();
 }
 function ordenar(){
 		$(".ordenar").hide();
