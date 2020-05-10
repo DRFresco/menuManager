@@ -20,7 +20,9 @@ app.use('/ordenes/', express.static(__dirname + '/ordenes'));
 menuManager.inicializa();
 
 //ORDENES
-
+app.get('/ordenes', function (req, res) {
+  menuManager.getOrdenes();
+});
 //MENÚ
 app.get('/menu', function (req, res) {
 	if( !isEmpty(menuManager.liveMenu) ){

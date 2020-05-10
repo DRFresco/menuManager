@@ -115,6 +115,21 @@ exports.actualiza=function (orden,callback){
 
 
 
+exports.getOrdenes= function(){
+	fs.readdir("ordenes", function (err, files) {
+	  if (err) {
+        console.error("Error stating file.", error);
+        return;
+      }
+      files.forEach(function (file, index) {
+
+      	console.log(file,index);
+
+
+      });
+
+	});
+}
 
 function getMostRecentFileName(dir) {
     var files = fs.readdirSync(dir);

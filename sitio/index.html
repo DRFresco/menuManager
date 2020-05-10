@@ -218,13 +218,14 @@ body{
 			<h1 ></h1>
 			<br>
 			<h5 style="color:black;"> @ciudad_silvestre nace con el objetivo de vincular a productores de zonas aledañas a la Ciudad de México con redes de consumo con interés en productos de alta calidad y en trazabilidad de producción.</h5>
+			<h5 style="color:black;"> Contacto por Whatsapp: 5572117094</h5>
 			<br>
 			<!-- <input type="button" value="¿Cómo funciona?" name=""/> -->
 		</div>
 		<div class="col-sm-6">
 			<img src="img/logo.png" class="logo">
 			<hr>
-			<h4 style="color:#49a954;">Menú para la semana del 01/mayo al 05/mayo del 2020</h4>
+			<h4 style="color:#49a954;">Lista de la semana 11/mayo. El pedido debe ser completado y pagado antes de las 10 am del martes 12</h4>
 		</div>
 	</div>
 
@@ -235,13 +236,10 @@ body{
 
 <div class="container searcharea" >
 		<div class="row">
-		<div class="col-sm-4" id="search1">
+		<!-- <div class="col-sm-4" id="search1">
 			<p class="instrucciones">1-Añade productos a tu orden mediante el menú</p>
-			Visualizar solo compras:<br>
-			<div class="carrito" onclick="togglecar()"><img src="img/carrito.png" style="width:50px;"></div><br><br>
-			Buscar por palabra:<br>
-	<input type="text" id="myinput" style="width:100%;" class="rabi"/><br>
-		</div>
+			
+		</div> -->
 		<div class="col-sm-4" id="search2">
 			<p class="instrucciones">2-Completa la información de tu pedido:</p>
 			<br>
@@ -288,27 +286,24 @@ body{
 			
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="carrito2"><p style="font-size: 13pt;color:red;">total:</p><span id="sum">0</span> MXN </div>
-				</div>
-				<div class="col-sm-6">
-					<div class="ordenar" onclick="checkout();">ckeckout</div>
-				</div>
-			</div>
+			
 			
 			
 			
 			<br>
-			
-			
-			<!-- Buscar por Producto:<br>
-	<select id="cars">
-  <option value="todos" selected="selected">Todos</option>
-  <option value="saab">Saab</option>
-  <option value="mercedes">Mercedes</option>
-  <option value="audi">Audi</option>
-</select> -->
+
+		</div>
+		<div class="col-sm-4" id="search3">
+			<div class="row">
+				
+					<div class="carrito2"><p style="font-size: 13pt;color:red;">total:</p><span id="sum">0</span> Pesos </div>
+				
+				
+			</div>
+			<br><br><br>
+			<div class="row">
+					<div class="ordenar" onclick="checkout();">ckeckout</div>
+			</div>
 		</div>
 	</div>
 	<div class="row"><hr>
@@ -316,6 +311,9 @@ body{
 </div>	
 <hr/>
 <div class="container splash" >
+
+
+
 	<div class="regresar" onclick="regresar();">regresar al menú</div>
 	<p>Tenemos DOS formas de pago:</p>
 	<ul>
@@ -330,6 +328,8 @@ Al momento de llenar tu hoja de pedido completa tu pago y envía el comprobante 
 	<li>entrega a domicilio: selecciona la opción y agrega tu dirección de envío. Las entregas comienzan a las 13h <br>	
 	El costo puede variar por área , revisa en nuestro el link https://bit.ly/2WIH79Q  o pregunta por whatsapp</li>
 </ul>
+<h1>Información de contacto:</h1>
+<h2 style="color:red;" id="confirmainfo"></h2>
 <h1>TOTAL:</h1>
 <h2 style="color:red;" id="confirmatotal"></h2>
 <div id="avisofinal"></div>
@@ -340,15 +340,30 @@ Al momento de llenar tu hoja de pedido completa tu pago y envía el comprobante 
 </div>
 
 <div class="container" id="table_cont" >
-<div class="row"></div>
+<div class="row" style="background-color: white;">
+	<div class="col-sm-6" >
+		Buscar por palabra:<br>
+		<input type="text" id="myinput" style="width:100%;" class="rabi"/><br>
+	</div>   
+	<div class="col-sm-6" >
+		Visualizar solo compras:<br>
+			<div class="carrito" onclick="togglecar()"><img src="img/carrito.png" style="width:50px;"></div>
+	</div>
+	
+		
+			
+		
+
+
+</div>
 <div class="row">
 	<table id="myTable" class="table products" cellspacing="0" width="100%"> <!-- table-striped table-bordered table-sm -->
 	  	<thead>
 	    <tr>
 	      
-	      <th class="th-sm">Producto
+	      <th class="th-sm">Productor
 	      </th>
-	      <th class="th-sm">productor
+	      <th class="th-sm">producto
 	      </th>
 	      <th class="th-sm">existencia
 	      </th>
@@ -447,8 +462,8 @@ function despliegaMenu(){
 	    		if(d_[1].includes("1/2k")){min=".5"}
 	    		if(d_[1].includes("1/4k")){min=".25"}
 	    		trstr='<tr class="prow unselected" id="'+d_[9]+'">\
-		      <td>'+nomproducto+'</td>\
 		      <td>'+d_[5]+'</td>\
+		      <td>'+nomproducto+'</td>\
 		      <td>'+d_[3]+'</td>\
 		      <td>'+d_[1]+'</td>\
 		      <td>'+d_[7]+'</td>'+
@@ -458,8 +473,8 @@ function despliegaMenu(){
 	    	}
 	    	else{
 	    		trstr='<tr class="prow unselected" id="'+d_[9]+'">\
-		      <td>'+nomproducto+'</td>\
 		      <td>'+d_[5]+'</td>\
+		      <td>'+nomproducto+'</td>\
 		      <td>'+d_[3]+'</td>\
 		      <td>'+d_[1]+'</td>\
 		      <td>'+d_[7]+'</td>'+
@@ -567,13 +582,14 @@ function checkout(){
 		form_total=$("#sum").html();
 		envio=Number.parseFloat($('input:radio[name=zona]:checked').val() );
 		orden={"nombre":form_name, "total":form_total,"telefono":form_telefono,"dicreccion":form_direccion,"comentarios":form_comentario,"costo_envio":envio,"orden":_productos}
-		$("#confirmatotal").text("$"+form_total+"  MXN");
+		$("#confirmainfo").text(form_name+" , "+form_direccion+" , "+form_telefono+" , ");
+		$("#confirmatotal").text("$"+form_total+"  Pesos");
 		$("#table_cont").fadeOut();
 		$(".splash").fadeIn();
 		$(".searcharea").fadeOut();
 }
 function regresar(){
-	
+		
 		$("#table_cont").fadeIn();
 		$(".splash").fadeOut();
 		$(".searcharea").fadeIn();
