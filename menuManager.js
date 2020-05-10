@@ -129,6 +129,8 @@ exports.getOrdenes= function(callback){
 	
 	fs.readdir("ordenes", function (err, files) {
 	 admin={};
+	 header="";
+	 csv="";
 	  if (err) {
         console.error("Error stating file.", error);
         return;
@@ -136,16 +138,46 @@ exports.getOrdenes= function(callback){
       files.forEach(function (file, index) {
       	
       	if(!file.includes(".DS")){
+
       		admin[file] = JSON.parse(fs.readFileSync('ordenes/'+file, 'utf8'));
+      		if (header==""){
+      			header=getHeader(admin[file])+"<Br>";
+      			csv+=header;
+      		}
       		//fs.readFile("ordenes/"+file, handleFile);
+      		csv+=handleOrder(file,admin[file])+"<Br>";
       	}
       	
       	//console.log(file,index);
       });
-      callback(admin)
+      callback(csv)
 	});
 }
-
+function getHeader(singularOrder){
+	respuesta="Archivo;nombre;total;telefono;direccion;comentarios;costo_envio;;";
+	for(key in singularOrder["orden"]){
+		//productArray=singularOrder["orden"][key];
+		mm=singularOrder["orden"][key][0].replace(";","");
+		respuesta+=mm+";";
+	}
+	return respuesta;
+}
+function handleOrder(file,singularOrder){
+	respuesta=
+	file+";"+
+	singularOrder["nombre"]+";"+
+	singularOrder["total"]+";"+
+	singularOrder["telefono"]+";"+
+	singularOrder["dicreccion"]+";"+
+	singularOrder["comentarios"]+";"+
+	singularOrder["costo_envio"]+";;";
+	for(key in singularOrder["orden"]){
+		productArray=singularOrder["orden"][key];
+		respuesta+=singularOrder["orden"][key][1]+";";
+	}
+	//respuesta+="\n";
+	return respuesta;
+}
 
 // Write the callback function
 function handleFile(err, data) {

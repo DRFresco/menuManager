@@ -49,7 +49,7 @@ app.post('/ordenview', function (req, res) {
 app.get('/ordenes', function (req, res) {
 
   menuManager.getOrdenes(function(ordenes){
-  		res.json(ordenes);
+  		res.send(ordenes);
 		console.log("corte de caja...");
   });
 });
