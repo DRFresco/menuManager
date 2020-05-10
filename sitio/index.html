@@ -538,7 +538,7 @@ function updateInput(ish, idrow){
 	precio=Number.parseFloat( _productos[idrow][2].replace("$","") );
 	if(ish==0){
 		$("tr#"+idrow).css("background-color","white")
-		$("tr#"+idrow).removeClass( "unselected" );
+		$("tr#"+idrow).addClass( "unselected" );
 		$("tr#"+idrow).find("td.totalind").html(0)
 	}
 	else{

@@ -115,20 +115,34 @@ exports.actualiza=function (orden,callback){
 
 
 
-exports.getOrdenes= function(){
+exports.getOrdenes= function(callback){
+	
 	fs.readdir("ordenes", function (err, files) {
+	 admin={};
 	  if (err) {
         console.error("Error stating file.", error);
         return;
       }
       files.forEach(function (file, index) {
-
-      	console.log(file,index);
-
-
+      	
+      	if(!file.includes(".DS")){
+      		admin[file] = JSON.parse(fs.readFileSync('ordenes/'+file, 'utf8'));
+      		//fs.readFile("ordenes/"+file, handleFile);
+      	}
+      	
+      	//console.log(file,index);
       });
-
+      callback(admin)
 	});
+}
+
+
+// Write the callback function
+function handleFile(err, data) {
+    if (err) throw err
+    obj = JSON.parse(data)
+	console.log(obj)
+    // You can now play with your datas
 }
 
 function getMostRecentFileName(dir) {

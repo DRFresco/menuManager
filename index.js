@@ -21,7 +21,10 @@ menuManager.inicializa();
 
 //ORDENES
 app.get('/ordenes', function (req, res) {
-  menuManager.getOrdenes();
+  menuManager.getOrdenes(function(ordenes){
+  		res.json(ordenes);
+		console.log("corte de caja...");
+  });
 });
 //MENÚ
 app.get('/menu', function (req, res) {
