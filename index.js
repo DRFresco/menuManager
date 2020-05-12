@@ -72,7 +72,8 @@ app.get('/menu', function (req, res) {
 
 //SITIO PRINCIPAL
 app.get('/', function (req, res) {
-	res.sendFile(path.join(__dirname + '/sitio/index.html'));
+	console.log("--")
+	res.sendFile(path.join(__dirname + '/sitio/splash.html'));
 
 });
 app.get('/orden', function (req, res) {
@@ -90,7 +91,7 @@ app.get('/hello', function (req, res) {
 
 
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+  console.log('Example app listening on port 3000!!!');
 });
 
 
