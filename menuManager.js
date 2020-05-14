@@ -124,7 +124,36 @@ exports.getOrden= function(orden,callback){
   	}
 	
 }
+exports.ordenaOrdenes= function(callback){
 
+	fs.readdir("ordenes", function (err, files) {
+	 admin={};
+	 header="";
+	 csv="";
+	  if (err) {
+        console.error("Error stating file.", error);
+        return;
+      }
+      files.forEach(function (file, index) {
+      	
+      	if(!file.includes(".DS")){
+
+      		admin[file] = JSON.parse(fs.readFileSync('ordenes/'+file, 'utf8'));
+      		if (header==""){
+      			header=getHeader(admin[file])+"<Br>";
+      			//csv+=header;
+      		}
+      		//fs.readFile("ordenes/"+file, handleFile);
+      		csv+=printOrder(file,admin[file])+"<Br>";
+      	}
+      	
+      	//console.log(file,index);
+      });
+      callback(csv)
+	});
+
+	
+}
 exports.getOrdenes= function(callback){
 	
 	fs.readdir("ordenes", function (err, files) {
@@ -172,13 +201,34 @@ function handleOrder(file,singularOrder){
 	singularOrder["comentarios"]+";"+
 	singularOrder["costo_envio"]+";;";
 	for(key in singularOrder["orden"]){
+
 		productArray=singularOrder["orden"][key];
+		
 		respuesta+=singularOrder["orden"][key][1]+";";
 	}
 	//respuesta+="\n";
 	return respuesta;
 }
-
+function printOrder(file,singularOrder){
+	respuesta=
+	"<hr>"+file+";"+
+		singularOrder["nombre"]+"<Br>"+
+	singularOrder["total"]+"<Br>"+
+	singularOrder["telefono"]+"<Br>"+
+	singularOrder["dicreccion"]+"<Br>"+
+	singularOrder["comentarios"]+"<Br>"+
+	singularOrder["costo_envio"]+"<Br>";
+	for(key in singularOrder["orden"]){
+		productArray=singularOrder["orden"][key];
+		if(productArray[1]!=0){
+			console.log(productArray);
+			respuesta+=productArray+"<Br>";
+		}
+		
+	}
+	//respuesta+="\n";
+	return respuesta;
+}
 // Write the callback function
 function handleFile(err, data) {
     if (err) throw err

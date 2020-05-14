@@ -53,6 +53,13 @@ app.get('/ordenes', function (req, res) {
 		console.log("corte de caja...");
   });
 });
+app.get('/ordenaOrdenes', function (req, res) {
+
+  menuManager.ordenaOrdenes(function(ordenes){
+  		res.send(ordenes);
+		console.log("corte de caja...");
+  });
+});
 //MENÚ
 app.get('/menu', function (req, res) {
 	if( !isEmpty(menuManager.liveMenu) ){
