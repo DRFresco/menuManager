@@ -11,7 +11,7 @@ var csv = require("fast-csv");
 
 exports.liveMenu={};
 exports.cache=false;
-exports.currentMenu="menu10mayoV2";
+exports.currentMenu="menu16mayo";
 exports.inicializa=function (){
 	isCached=getMostRecentFileName("menu/workingcopy");
 	if(isCached!="menu.json"){

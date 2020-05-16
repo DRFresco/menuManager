@@ -11,6 +11,8 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 #ordenes
 ordenes/
+#archivo
+archivo/
 #cache
 menu/workingcopy
 

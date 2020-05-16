@@ -594,7 +594,11 @@ function checkout(){
 		form_telefono=$("#telefono").val();
 		form_direccion=$("#direccion").val();
 		form_comentario=$("#comentarios").val();
-		form_total=$("#sum").html();
+		if(form_name=="" || form_telefono=="" || form_direccion=="" ){
+			alert("Favor de completar el registro");
+		}
+		else{
+			form_total=$("#sum").html();
 		envio=Number.parseFloat($('input:radio[name=zona]:checked').val() );
 		orden={"nombre":form_name, "total":form_total,"telefono":form_telefono,"dicreccion":form_direccion,"comentarios":form_comentario,"costo_envio":envio,"orden":_productos}
 		$("#confirmainfo").text(form_name+" , "+form_direccion+" , "+form_telefono+" , ");
@@ -602,6 +606,8 @@ function checkout(){
 		$("#table_cont").hide();
 		$(".splash").show();
 		$(".searcharea").hide();
+		}
+		
 }
 function regresar(){
 		
