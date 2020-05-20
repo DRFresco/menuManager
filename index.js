@@ -16,6 +16,7 @@ var printingSystem = require('./printingSystem');
 //console.log("public",__dirname + '/sitio')
 app.use('/', express.static(__dirname + '/sitio'));
 app.use('/ordenes/', express.static(__dirname + '/ordenes'));
+app.use('/archivo/', express.static(__dirname + '/archivo'));
 
 
 menuManager.inicializa();
