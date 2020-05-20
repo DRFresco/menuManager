@@ -12,6 +12,7 @@ app.use(bodyParser.json())
 var fs = require("fs");
 var path = require('path');
 var menuManager = require('./menuManager');
+var printingSystem = require('./printingSystem');
 //console.log("public",__dirname + '/sitio')
 app.use('/', express.static(__dirname + '/sitio'));
 app.use('/ordenes/', express.static(__dirname + '/ordenes'));
@@ -90,6 +91,10 @@ app.get('/orden', function (req, res) {
 //TEST
 app.get('/hello', function (req, res) {
   res.sendFile(path.join(__dirname + '/sitio/staticindex.html'));
+});
+//ADMIN
+app.get('/adminPrint', function (req, res) {
+  printingSystem.print();
 });
 
 
