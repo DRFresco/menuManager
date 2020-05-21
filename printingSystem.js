@@ -13,9 +13,17 @@ var pdf = require('html-pdf');
 
 
 
-exports.print=function (cache){
+exports.print=function (callback){
+	htmls={};
 	contenido="";
-	tabla=`
+
+	readordenes(function(data){
+		//console.log(data);
+		for(key in data){
+			httm="";
+			htmls[key]="";
+			ordenInfo=data[key];
+			tabla=`
 			<Br>
 			<Br>
 			<Br>
@@ -26,14 +34,12 @@ exports.print=function (cache){
 				<td style="border-bottom: 1px solid #000!important;">Productor</td>
 				<td style="border-bottom: 1px solid #000!important;">Cantidad</td>
 				<td style="border-bottom: 1px solid #000!important;">-</td>
+				<td style="border-bottom: 1px solid #000!important;">-</td>
 				<td style="border-bottom: 1px solid #000!important;">Total por producto</td>
+				<td style="border-bottom: 1px solid #000!important;">-</td>
 			</tr>
 		
 		`;
-	readordenes(function(data){
-		//console.log(data);
-		for(key in data){
-			ordenInfo=data[key];
 			contenido = `
 
 		<div style="width: 100vw;float:left;">
@@ -73,7 +79,7 @@ exports.print=function (cache){
 			
 			</table>
 		</div>
-		<pre  style="width:13vw;font-size: 4pt; height:10vw;position:fixed;top:10px;right: 120px;">
+		<pre  style="width:13vw;font-size: 4pt; height:10vw;position:fixed;top:10px;right: 140px;">
 		         wWWWw               wWWWw
 		   vVVVv (___) wWWWw         (___)  vVVVv
 		   (___)  ~Y~  (___)  vVVVv   ~Y~   (___)
@@ -83,6 +89,12 @@ exports.print=function (cache){
 		jgs^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 		      C I U D A D   S I L V E S T R E 
+
+		      CIUDADSILVESTRE.MX
+
+		      55 72117094 
+
+		      @CIUDAD_SILVESTRE
 
 		</pre>
 
@@ -98,22 +110,25 @@ exports.print=function (cache){
 						productor=rr[1];
 						precio=parseFloat(arr[2].replace("$",""));
 						cantidad=parseFloat(arr[1]);
-						tr='<tr><td>'+producto+'</td><td>'+productor+'</td>'+"-"+'<td></td>'+"-"+'<td></td>'+'<td>'+cantidad+'</td>'+'<td>'+(precio*cantidad)+'</td>';
+						tr='<tr><td>'+producto+'</td><td>'+productor+'</td>'+""+'<td></td>'+""+'<td></td>'+'<td>'+cantidad+'</td>'+'<td>'+(precio*cantidad)+'</td>';
 						tabla+=tr;
 					}
 					
 				}
 
-					contenido=contenido+tabla+'</table>';
-					pdf.create(contenido).toFile('./bandeja/'+key+'.pdf', function(err, res) {
-					    if (err){
-					        console.log(err);
-					    } else {
-					        console.log(res);
-					    }
-					});
+					httm=contenido+tabla+'</table>';
+					
+					// pdf.create(contenido).toFile('./bandeja/'+key+'.pdf', function(err, res) {
+					//     if (err){
+					//         console.log(err);
+					//     } else {
+					//         console.log(res);
+					//     }
+					// });
+					htmls[key]=httm;
 
 		}
+		callback(htmls);
 	});
 
 

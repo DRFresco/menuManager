@@ -2,6 +2,8 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser')
 var Crawler = require("crawler");
+var async = require("async");
+var pdf = require('html-pdf');
 //          (_    ,_,    _) 
 //          / `'--) (--'` \
 //         /  _,-'\_/'-,_  \
@@ -95,9 +97,58 @@ app.get('/hello', function (req, res) {
 });
 //ADMIN
 app.get('/adminPrint', function (req, res) {
-  printingSystem.print();
+	thistime="";
+	bandeja={};
+	printed=0;
+	printingSystem.print(function(htmls){
+		fs.readdir("bandeja", function (err, files) {
+			 admin={};
+			 //thistime="";
+			 header="";
+			 csv="";
+			  if (err) {
+		        console.error("Error stating file.", error);
+		        return;
+		      }
+		      files.forEach(function (file, index) {
+
+		      		name=file.replace(".pdf","");
+		      		
+			      	if(!file.includes(".DS")){
+			      		bandeja[name]=1;
+			      		console.log(name," ya procesado");
+			      	}
+			      	
+		     });
+			for(key in htmls){
+				if(!bandeja[key] && printed<1){
+					printed++;
+					    pdf.create(htmls[key]).toFile('./bandeja/'+key+'.pdf', function(err, res) {
+							if (err){console.log(err);} else {console.log(res);}
+						});
+				}
+		      
+			}
+		  //     pdf.create(thistime).toFile('./bandeja/'+thistime+'.pdf', function(err, res) {
+				// if (err){console.log(err);} else {console.log(res);}
+			 //  });
+		});
+	
+    				
+	
+	});
+	
+
+
 });
 
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
 
 
 //PUERTO
