@@ -84,7 +84,7 @@ app.get('/menu', function (req, res) {
 //SITIO PRINCIPAL
 app.get('/', function (req, res) {
 	console.log("--")
-	res.sendFile(path.join(__dirname + '/sitio/splash.html'));
+	res.sendFile(path.join(__dirname + '/sitio/menu.html'));
 
 });
 app.get('/orden', function (req, res) {
@@ -100,6 +100,7 @@ app.get('/adminPrint', function (req, res) {
 	thistime="";
 	bandeja={};
 	printed=0;
+	var options = { format: 'A4' };
 	printingSystem.print(function(htmls){
 		fs.readdir("bandeja", function (err, files) {
 			 admin={};
@@ -123,7 +124,7 @@ app.get('/adminPrint', function (req, res) {
 			for(key in htmls){
 				if(!bandeja[key] && printed<1){
 					printed++;
-					    pdf.create(htmls[key]).toFile('./bandeja/'+key+'.pdf', function(err, res) {
+					    pdf.create(htmls[key],{ format: 'Letter' }).toFile('./bandeja/'+key+'.pdf', function(err, res) {
 							if (err){console.log(err);} else {console.log(res);}
 						});
 				}
