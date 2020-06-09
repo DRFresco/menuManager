@@ -43,10 +43,12 @@ N1rv4n4esley!!
 
 ssh root@199.244.51.123 
 rm -rf /root/orion/menuManager/ordenes
-
+rm -rf /orion/menuManager/archivo
 mv /root/orion/menuManager/ordenes /root/orion/menuManager/archivo/ordenes27mayo
 
-zip -r ordenes27mayo.zip ordenes27mayo
+zip -r ordenes2jun.zip ordenes2jun
+
+cp -r /root/orion/menuManager/ordenes /root/orion/menuManager/archivo/ordenes2jun 
 
 
 

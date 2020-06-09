@@ -1,9 +1,15 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser')
+const dotenv = require('dotenv');
+dotenv.config();
 var Crawler = require("crawler");
 var async = require("async");
 var pdf = require('html-pdf');
+const multer = require('multer');
+const csv = require('fast-csv');
+_ = require('underscore');
+
 //          (_    ,_,    _) 
 //          / `'--) (--'` \
 //         /  _,-'\_/'-,_  \
@@ -51,7 +57,6 @@ app.post('/ordenview', function (req, res) {
   });
 });
 app.get('/ordenes', function (req, res) {
-
   menuManager.getOrdenes(function(ordenes){
   		res.send(ordenes);
 		console.log("corte de caja...");
@@ -84,11 +89,15 @@ app.get('/menu', function (req, res) {
 //SITIO PRINCIPAL
 app.get('/', function (req, res) {
 	console.log("--")
-	res.sendFile(path.join(__dirname + '/sitio/menu.html'));
+	res.sendFile(path.join(__dirname + '/sitio/splash.html'));
 
 });
 app.get('/orden', function (req, res) {
 	res.sendFile(path.join(__dirname + '/sitio/orderview.html'));
+
+});
+app.get('/uploadmenu', function (req, res) {
+	res.sendFile(path.join(__dirname + '/sitio/uploadmenu.html'));
 
 });
 //TEST
@@ -134,13 +143,7 @@ app.get('/adminPrint', function (req, res) {
 				// if (err){console.log(err);} else {console.log(res);}
 			 //  });
 		});
-	
-    				
-	
 	});
-	
-
-
 });
 
 Object.size = function(obj) {
@@ -150,13 +153,28 @@ Object.size = function(obj) {
     }
     return size;
 };
-
+// MENU UPLOAD
+const upload = multer({ dest: 'menu/csv/' });
+app.post('/uploadmenu', upload.single('file'), function (req, res) {
+	console.log("ok");
+	const fileRows = [];
+  csv.parseFile(req.file.path)
+    .on("data", function (data) {
+      fileRows.push(data); // push each row
+    })
+    .on("end", function () {
+      console.log(fileRows) //contains array of arrays. Each inner array represents row of the csv file, with each element of it a column
+      fs.unlinkSync(req.file.path);   // remove temp file
+      //process "fileRows" and respond
+    })
+});
 
 //PUERTO
+const port = process.env.PORT;
+console.log(`Your port is ${port}`);
 
-
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!!!');
+app.listen(port, function () {
+  console.log('Example app listening on port '+port+'!!!');
 });
 
 
