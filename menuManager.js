@@ -11,7 +11,7 @@ var csv = require("fast-csv");
 
 exports.liveMenu={};
 exports.cache=false;
-exports.currentMenu="menu13Jun"//getMostRecentFileName("menu/archivo").replace(".csv","");
+exports.currentMenu="menuactual"//getMostRecentFileName("menu/archivo").replace(".csv","");
 console.log("currentMenu:",this.currentMenu);
 exports.inicializa=function (){
 	isCached=getMostRecentFileName("menu/workingcopy");
@@ -51,7 +51,7 @@ exports.updateCache=function (cache){
 }
 exports.menu=function (callback){
 	menu={};
-	IN_file="/root/orion/menuManager/menu/"+this.currentMenu+".csv";
+	IN_file="menu/"+this.currentMenu+".csv";
 	rownum=0;
 	proovedor="";
 	csv
