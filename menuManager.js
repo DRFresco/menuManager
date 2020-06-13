@@ -41,7 +41,7 @@ exports.inicializa=function (){
 }
 exports.updateCache=function (cache){
 	const jsonString = JSON.stringify(cache);
-	fs.writeFile('/menu/workingcopy/menu.json', jsonString, err => {
+	fs.writeFile('menu/workingcopy/menu.json', jsonString, err => {
 	    if (err) {
 	        console.log('Error: writing file failed', err)
 	    } else {
@@ -51,7 +51,7 @@ exports.updateCache=function (cache){
 }
 exports.menu=function (callback){
 	menu={};
-	IN_file="/menu/"+this.currentMenu+".csv";
+	IN_file="menu/"+this.currentMenu+".csv";
 	rownum=0;
 	proovedor="";
 	csv
