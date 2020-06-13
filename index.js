@@ -89,7 +89,7 @@ app.get('/menu', function (req, res) {
 //SITIO PRINCIPAL
 app.get('/', function (req, res) {
 	console.log("--")
-	res.sendFile(path.join(__dirname + '/sitio/splash.html'));
+	res.sendFile(path.join(__dirname + '/sitio/menu.html'));
 
 });
 app.get('/orden', function (req, res) {
@@ -115,7 +115,6 @@ app.get('/adminPrint', function (req, res) {
 			 admin={};
 			 //thistime="";
 			 header="";
-			 csv="";
 			  if (err) {
 		        console.error("Error stating file.", error);
 		        return;
