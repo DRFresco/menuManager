@@ -51,7 +51,7 @@ exports.updateCache=function (cache){
 }
 exports.menu=function (callback){
 	menu={};
-	IN_file="menu/"+this.currentMenu+".csv";
+	IN_file="/root/orion/menuManager/menu/"+this.currentMenu+".csv";
 	rownum=0;
 	proovedor="";
 	csv
