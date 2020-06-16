@@ -183,6 +183,40 @@ exports.getOrdenes= function(callback){
       callback(csv)
 	});
 }
+exports.getOrdenesJson= function(callback){
+	
+	fs.readdir("ordenes", function (err, files) {
+	 admin={};
+	 header="";
+	 csv="";
+	  if (err) {
+        console.error("Error stating file.", error);
+        return;
+      }
+      files.forEach(function (file, index) {
+      	
+      	if(!file.includes(".DS")){
+
+      		admin[file] = JSON.parse(fs.readFileSync('ordenes/'+file, 'utf8'));
+      		if (header==""){
+      			header=getHeader(admin[file])+"<Br>";
+      			csv+=header;
+      		}
+      		csv+=handleOrder(file,admin[file])+"<Br>";
+      	}
+      	
+      });
+      	bandeja={};
+      	fs.readdir("bandeja", function (err, files) {
+      		bandeja={};
+      		files.forEach(function (file) {
+      			bandeja[file.replace(".pdf","")]=1;
+		    });
+    		callback({"ordenes":admin,"bandeja":bandeja})
+		});
+      
+	});
+}
 function getHeader(singularOrder){
 	respuesta="Archivo;nombre;total;telefono;direccion;comentarios;costo_envio;;";
 	for(key in singularOrder["orden"]){

@@ -85,11 +85,22 @@ app.get('/menu', function (req, res) {
 	
 
 });
+// BACK
+app.get('/back', function (req, res) {
+	console.log("backlog")
+	
+	res.sendFile(path.join(__dirname + '/sitio/back.html'));
 
+});
+app.get('/backOrdenes', function (req, res) {
+	menuManager.getOrdenesJson(function(ordenes){
+  		res.send(ordenes);
+  	});
+
+});
 //SITIO PRINCIPAL
 app.get('/', function (req, res) {
-	console.log("--")
-	res.sendFile(path.join(__dirname + '/sitio/menu.html'));
+	res.sendFile(path.join(__dirname + '/sitio/splash.html'));
 
 });
 app.get('/orden', function (req, res) {

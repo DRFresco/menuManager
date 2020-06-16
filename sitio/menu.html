@@ -27,7 +27,7 @@ table.dataTable thead .sorting_desc_disabled:before {
 }
 body{
 	background: url("img/jitomate.jpg");
-	background-size: cover;
+	/*background-size: cover;*/
 }
 .head{
 	text-align: center;
@@ -39,7 +39,7 @@ body{
 }
 .searcharea{
 	color: white;
-    background-color: #49a954;
+    background-color: seagreen;
 }
 .logo{
 	width:150px;
@@ -225,6 +225,13 @@ body{
 		<div class="col-sm-6">
 			<img src="img/logo.png" class="logo">
 			<hr>
+			<audio controls>
+  <source src="horse.ogg" type="audio/ogg">
+  <source src="horse.mp3" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio><br>
+Lust For Life - Lana del Rey
+<hr>
 			<span style="color:#49a954;">Lista de la semana 30/mayo
 <br>
 - El pedido debe ser completado y pagado antes de las 10 am del martes 2 de junio.<br>
@@ -472,12 +479,22 @@ function despliegaMenu(){
 	    	d_=_MENU[entry][i];
 	    	nomproducto=d_[0].replace("[[[[[[[[[[[AGOTADO]]]]]]]]]]","(AGOTADO)").trim();
 	    	_productos[d_[9]]=[d_[0]+"[|]"+originalname,0,d_[7]]
+	    	//Procesa instagram
+	    	linkSocial=d_[5];
+	    	if(d_[5].includes("@")){
+	    		f1=d_[5].split("@");
+	    		linkSocial=f1[0].replace("(","")+'<a target="_blank" href="https://www.instagram.com/'
+	    					+f1[1].replace(")","") 
+	    					+ '">@'+f1[1].replace(")","")+'</a>';
+	    		
+	    	}
+	    	//procesa fraccionados
 	    	if(d_[1].includes("/")){
 	    		console.log(d_[1],"--")
 	    		if(d_[1].includes("1/2")){min=".5"}
 	    		if(d_[1].includes("1/4")){min=".25"}
 	    		trstr='<tr class="prow unselected" id="'+d_[9]+'">\
-		      <td>'+d_[5]+'</td>\
+		      <td>'+linkSocial+'</td>\
 		      <td style="background-color:#ffffff;">'+nomproducto+'</td>\
 		      <td>'+d_[3]+'</td>\
 		      <td>'+d_[1]+'</td>\
@@ -488,7 +505,7 @@ function despliegaMenu(){
 	    	}
 	    	else{
 	    		trstr='<tr class="prow unselected" id="'+d_[9]+'">\
-		      <td>'+d_[5]+'</td>\
+		      <td>'+linkSocial+'</td>\
 		      <td style="background-color:#ffffff;">'+nomproducto+'</td>\
 		      <td>'+d_[3]+'</td>\
 		      <td>'+d_[1]+'</td>\
