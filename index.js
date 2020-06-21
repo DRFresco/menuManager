@@ -100,7 +100,7 @@ app.get('/backOrdenes', function (req, res) {
 });
 //SITIO PRINCIPAL
 app.get('/', function (req, res) {
-	res.sendFile(path.join(__dirname + '/sitio/splash.html'));
+	res.sendFile(path.join(__dirname + '/sitio/menu.html'));
 
 });
 app.get('/orden', function (req, res) {
