@@ -23,6 +23,7 @@ var menuManager = require('./menuManager');
 var printingSystem = require('./printingSystem');
 //console.log("public",__dirname + '/sitio')
 app.use('/', express.static(__dirname + '/sitio'));
+app.use('/bandeja/', express.static(__dirname + '/bandeja'));
 app.use('/ordenes/', express.static(__dirname + '/ordenes'));
 app.use('/archivo/', express.static(__dirname + '/archivo'));
 
@@ -85,19 +86,10 @@ app.get('/menu', function (req, res) {
 	
 
 });
-// BACK
-app.get('/back', function (req, res) {
-	console.log("backlog")
-	
-	res.sendFile(path.join(__dirname + '/sitio/back.html'));
 
-});
-app.get('/backOrdenes', function (req, res) {
-	menuManager.getOrdenesJson(function(ordenes){
-  		res.send(ordenes);
-  	});
 
-});
+
+
 //SITIO PRINCIPAL
 app.get('/', function (req, res) {
 	res.sendFile(path.join(__dirname + '/sitio/splash.html'));
@@ -154,6 +146,47 @@ app.get('/adminPrint', function (req, res) {
 			 //  });
 		});
 	});
+});
+
+
+// BACK
+app.get('/back', function (req, res) {
+	console.log("backlog")
+	
+	res.sendFile(path.join(__dirname + '/sitio/back.html'));
+
+});
+app.post('/backconfirm', function (req, res) {
+	nombreorden=req.body["nombre"];
+	console.log("./ordenes/"+nombreorden)
+	fs.readFile("./ordenes/"+nombreorden, (err, data) => {
+	    if (err) throw err;
+	    let json = JSON.parse(data);
+
+	    html=printingSystem.printSingle(nombreorden,json);
+		pdf.create(html,{ format: 'Letter' }).toFile('./bandeja/'+nombreorden+'.pdf', function(err, result) {
+			if (err){console.log(err);} else {console.log(result);}
+			console.log('./bandeja/'+nombreorden+'.pdf',"CONFIRMED");
+			res.sendStatus(200)
+		});
+		 
+	});
+	
+	
+});
+app.post('/backunconfirm', function (req, res) {
+	nombreorden=req.body["nombre"];
+	fs.unlink("./bandeja/"+nombreorden+".pdf", function (err) {
+	    if (err) throw err;
+	    // if no error, file has been deleted successfully
+	     res.sendStatus(200)
+	}); 
+});
+app.get('/backOrdenes', function (req, res) {
+	menuManager.getOrdenesJson(function(ordenes){
+  		res.send(ordenes);
+  	});
+
 });
 
 Object.size = function(obj) {

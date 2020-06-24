@@ -301,9 +301,11 @@ function getOrdenes(){
 	    console.log(_MENU)
 	    for(orden in _MENU["ordenes"]){
 	    	status="<p style='color:blue;'>REGISTRADA</p>";
-	    	boton='<div class="plu button-p" onclick="">-</div>';
+	    	filerep='<a target="_blank" href="/ordenes/'+orden+'"'+'>JSON</a>';
+	    	boton='<div class="plu button-p" onclick=\'confirm("'+orden+'");\'>-</div>';
 	    	if(_MENU["bandeja"][orden]){status="<p style='color:yellowgreen;'>CONFIRMADA</p>";
-	    boton='<div class="inc button-m">+</div>';}
+	    	filerep='<a target="_blank" href="/bandeja/'+orden+'.pdf"'+'>PDF</a>';
+	    boton='<div class="inc button-m" onclick=\'unconfirm("'+orden+'");\'>+</div>';}
 	    	orden_st=orden.replace(".json","");
 	    	orden_info=_MENU["ordenes"][orden];
 	    	trstr='<tr class="prow unselected" id="'+orden_st+'">\
@@ -313,7 +315,9 @@ function getOrdenes(){
 		      <td>'+orden_info.telefono+'</td>\
 		      <td>'+"info"+'</td>\
 		      <td>'+status+'</td>\
-		      <td>'+boton+'</td>';
+		      <td>'+filerep+'</td>\
+		      <td>'+boton+'</td>'
+		      ;
 		      $("#tabla_productos").append(trstr)
 	    }
 	    
@@ -324,20 +328,36 @@ function getOrdenes(){
 	xmlhttp.open("GET", "/backOrdenes", true);
 	xmlhttp.send();
 }
-function confirma(){
-		$("#tabla_productos").html("")
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function() {
-  		if (this.readyState == 4 && this.status == 200) {
-	    	getOrdenes();
+
+function confirm(nombre){
+		$(".button-m").hide();
+		$(".button-p").hide();
+		orden={"nombre":nombre}
+	$.ajax({
+        url: '/backconfirm',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(orden),
+        success: function (data){
+        	getOrdenes();
+			console.log("confirmado",data);
 	    }
-	    
-	    //despliegaMenu();
-	    
-	  
-	};
-	xmlhttp.open("GET", "/backConfirm", true);
-	xmlhttp.send();
+	});
+}
+function unconfirm(nombre){
+	$(".button-m").hide();
+		$(".button-p").hide();
+		orden={"nombre":nombre}
+	$.ajax({
+        url: '/backunconfirm',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(orden),
+        success: function (data){
+        	getOrdenes();
+				console.log("DELETED",data);
+	    }
+	});
 }
 
 </script>
