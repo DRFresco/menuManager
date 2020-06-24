@@ -185,7 +185,7 @@ exports.getOrdenes= function(callback){
 }
 exports.getOrdenesJson= function(callback){
 	
-	fs.readdir("ordenes", function (err, files) {
+	fs.readdir("./ordenes", function (err, files) {
 	 admin={};
 	 header="";
 	 csv="";
@@ -207,7 +207,7 @@ exports.getOrdenesJson= function(callback){
       	
       });
       	bandeja={};
-      	fs.readdir("bandeja", function (err, files) {
+      	fs.readdir("./bandeja", function (err, files) {
       		bandeja={};
       		files.forEach(function (file) {
       			bandeja[file.replace(".pdf","")]=1;
