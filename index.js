@@ -201,7 +201,7 @@ Object.size = function(obj) {
 
 // OPERACIÓN  //cambiar get a post para hacer sistema rudimentario de seguridad
 
-app.get('/admin', function (req, res) {
+app.get('/orion/admin', function (req, res) {
 	console.log(path.join(__dirname + '/sitio/admin.html'));
 	res.sendFile(path.join(__dirname + '/sitio/admin.html'));
 });
