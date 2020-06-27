@@ -11,7 +11,7 @@ var csv = require("fast-csv");
 
 exports.liveMenu={};
 exports.cache=false;
-exports.currentMenu="menu20jun"//getMostRecentFileName("menu/archivo").replace(".csv","");
+exports.currentMenu="mainmenu"//getMostRecentFileName("menu/archivo").replace(".csv","");
 console.log("currentMenu:",this.currentMenu);
 exports.inicializa=function (){
 	isCached=getMostRecentFileName("menu/workingcopy");
@@ -184,39 +184,139 @@ exports.getOrdenes= function(callback){
 	});
 }
 exports.getOrdenesJson= function(callback){
-	
-	fs.readdir("./ordenes", function (err, files) {
-	 admin={};
-	 header="";
-	 csv="";
-	  if (err) {
-        console.error("Error stating file.", error);
-        return;
-      }
-      files.forEach(function (file, index) {
-      	
-      	if(!file.includes(".DS")){
+	orderdir="./ordenes";
+	if (!fs.existsSync(orderdir)){
+	   callback({})
+	}
+	else{
+		fs.readdir("./ordenes", function (err, files) {
+		 admin={};
+		 header="";
+		 csv="";
+		  if (err) {
+	        console.error("Error stating file.", error);
+	        return;
+	      }
+	      files.forEach(function (file, index) {
+	      	
+	      	if(!file.includes(".DS")){
 
-      		admin[file] = JSON.parse(fs.readFileSync('ordenes/'+file, 'utf8'));
-      		if (header==""){
-      			header=getHeader(admin[file])+"<Br>";
-      			csv+=header;
-      		}
-      		csv+=handleOrder(file,admin[file])+"<Br>";
-      	}
-      	
-      });
-      	bandeja={};
-      	fs.readdir("./bandeja", function (err, files) {
-      		bandeja={};
-      		files.forEach(function (file) {
-      			bandeja[file.replace(".pdf","")]=1;
-		    });
-    		callback({"ordenes":admin,"bandeja":bandeja})
+	      		admin[file] = JSON.parse(fs.readFileSync('ordenes/'+file, 'utf8'));
+	      		if (header==""){
+	      			header=getHeader(admin[file])+"<Br>";
+	      			csv+=header;
+	      		}
+	      		csv+=handleOrder(file,admin[file])+"<Br>";
+	      	}
+	      	
+	      });
+	      	bandeja={};
+	      	fs.readdir("./bandeja", function (err, files) {
+	      		bandeja={};
+	      		files.forEach(function (file) {
+	      			bandeja[file.replace(".pdf","")]=1;
+			    });
+	    		callback({"ordenes":admin,"bandeja":bandeja})
+			});
+	      
 		});
-      
+	}
+	
+}
+exports.closeShop=function (callback) {  //CERRAR TIENDA
+	ordenesDir="./menu/mainmenu.csv";
+	//TIMESTAMP en segundos
+	archivoDir="./archivo/mainmenu_"+Math.floor(Date.now() / 1000);
+    fs.rename(ordenesDir, archivoDir, function (err) {
+        if (err) {
+            if (err.code === 'EXDEV') {
+                copy();
+            } else {
+                callback(err);
+            }
+            return;
+        }
+        callback();
+        
+    });
+
+    function copy() { 		
+        var readStream = fs.createReadStream(ordenesDir);
+        var writeStream = fs.createWriteStream(archivoDir);
+
+        readStream.on('error', callback);
+        writeStream.on('error', callback);
+
+        readStream.on('close', function () {
+            fs.unlink(ordenesDir, callback);
+        });
+
+        readStream.pipe(writeStream);
+    }
+}
+exports.closeOp=function (callback) {	//CERRAR OPERACIÓN
+	ordenesDir="./ordenes";
+	//TIMESTAMP en segundos
+	archivoDir="./archivo/ordenes_"+Math.floor(Date.now() / 1000);
+    fs.rename(ordenesDir, archivoDir, function (err) {
+        if (err) {
+            if (err.code === 'EXDEV') {
+                copy();
+            } else {
+                callback(err);
+            }
+            return;
+        }
+        else{
+        	//fs.unlink("./menu/workingcopy/menu.json", callback);
+
+        }
+        callback();
+        
+    });
+
+    function copy() {
+        var readStream = fs.createReadStream(ordenesDir);
+        var writeStream = fs.createWriteStream(archivoDir);
+
+        readStream.on('error', callback);
+        writeStream.on('error', callback);
+
+        readStream.on('close', function () {
+            fs.unlink(ordenesDir, callback);
+        });
+
+        readStream.pipe(writeStream);
+    }
+}
+
+exports.uploadmenu= function(newmenu,callback){
+	fs.unlink("./menu/workingcopy/menu.json", function (err) {
+			    
+	});
+
+	fs.writeFile('./menu/mainmenu.csv', newmenu, function (err) {
+	  if (err){
+	  	callback({"status":"err","err":err})
+	  } 
+	  else{
+	  	fs.mkdir("./ordenes", (err) => { 
+
+	  		
+
+		    if (err) { 
+		         callback({"status":"err","err":err})
+		    } 
+		    else{
+		    	
+		    	callback({"status":"suave"})}
+		}); 
+
+	  }
 	});
 }
+
+
 function getHeader(singularOrder){
 	respuesta="Archivo;nombre;total;telefono;direccion;comentarios;costo_envio;;";
 	for(key in singularOrder["orden"]){
@@ -284,3 +384,4 @@ function getMostRecentFileName(dir) {
         return fs.statSync(fullpath).mtime;
     });
 }
+

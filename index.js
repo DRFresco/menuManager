@@ -91,18 +91,25 @@ app.get('/menu', function (req, res) {
 
 
 //SITIO PRINCIPAL
+
+
 app.get('/', function (req, res) {
-	res.sendFile(path.join(__dirname + '/sitio/splash.html'));
+	menudir="./menu/mainmenu.csv";
+	if (!fs.existsSync(menudir)){
+	   res.sendFile(path.join(__dirname + '/sitio/splash.html'));
+	}
+	else{
+	   res.sendFile(path.join(__dirname + '/sitio/menu.html'));
+	}	
 
 });
 app.get('/orden', function (req, res) {
 	res.sendFile(path.join(__dirname + '/sitio/orderview.html'));
 
 });
-app.get('/uploadmenu', function (req, res) {
-	res.sendFile(path.join(__dirname + '/sitio/uploadmenu.html'));
 
-});
+
+
 //TEST
 app.get('/hello', function (req, res) {
   res.sendFile(path.join(__dirname + '/sitio/staticindex.html'));
@@ -150,12 +157,7 @@ app.get('/adminPrint', function (req, res) {
 
 
 // BACK
-app.get('/back', function (req, res) {
-	console.log("backlog")
-	
-	res.sendFile(path.join(__dirname + '/sitio/back.html'));
 
-});
 app.post('/backconfirm', function (req, res) {
 	nombreorden=req.body["nombre"];
 	console.log("./ordenes/"+nombreorden)
@@ -196,20 +198,54 @@ Object.size = function(obj) {
     }
     return size;
 };
-// MENU UPLOAD
-const upload = multer({ dest: 'menu/csv/' });
-app.post('/uploadmenu', upload.single('file'), function (req, res) {
-	console.log("ok");
-	const fileRows = [];
-  csv.parseFile(req.file.path)
-    .on("data", function (data) {
-      fileRows.push(data); // push each row
-    })
-    .on("end", function () {
-      console.log(fileRows) //contains array of arrays. Each inner array represents row of the csv file, with each element of it a column
-      fs.unlinkSync(req.file.path);   // remove temp file
-      //process "fileRows" and respond
-    })
+
+// OPERACIÓN  //cambiar get a post para hacer sistema rudimentario de seguridad
+
+app.get('/admin', function (req, res) {
+	res.sendFile(path.join(__dirname + '/sitio/admin.html'));
+});
+app.get('/back', function (req, res) {
+	res.sendFile(path.join(__dirname + '/sitio/back.html'));
+});
+app.get('/status', function (req, res) {
+	orderdir="./ordenes";
+	bandejadir="./bandeja";
+	menufile="./menu/mainmenu.csv";
+	status={"ordenes":0,"bandeja":0,"menu":0}
+	if (fs.existsSync(orderdir)){status.ordenes=1; }
+	if (fs.existsSync(bandejadir)){status.bandeja=1; }
+	if (fs.existsSync(menufile)){status.menu=1; }
+	res.json(status);
+});
+app.post('/uploadmenu', function (req, res) {
+	newmenu=req.body["newmenu"];
+	menuManager.uploadmenu(newmenu,function (respuesta){
+		res.json(respuesta);
+	});
+
+});
+app.post('/closeShop', function (req, res) {
+	menuManager.closeShop(function(err){
+		if(!err){
+			res.send({"status":"suave",});
+		}
+		else{
+			res.send({"status":"err","err":err});
+		}
+		
+	})
+})
+app.post('/closeOp', function (req, res) {
+	console.log("closing operation");
+	menuManager.closeOp(function(err){
+		if(!err){
+			res.send({"status":"suave",});
+		}
+		else{
+			res.send({"status":"err","err":err});
+		}
+		
+	})
 });
 
 //PUERTO

@@ -44,7 +44,7 @@ N1rv4n4esley!!
 ssh root@199.244.51.123 
 rm -rf /root/orion/menuManager/ordenes
 rm -rf /orion/menuManager/archivo
-mv /root/orion/menuManager/ordenes /root/orion/menuManager/archivo/ordenes9jun
+mv /root/orion/menuManager/ordenes /root/orion/menuManager/archivo/ordenes13jun
 mv /root/orion/menuManager/archivo/ordenes9jun /root/orion/menuManager/ordenes
 mv /root/orion/menuManager/archivo/ordenes9jun /root/orion/menuManager/ordenes 
 
@@ -58,12 +58,12 @@ git fetch --all
 git reset --hard origin/master
 
 
-zip -r ordenes9jun.zip ordenes9jun
+zip -r ordenes23jun.zip ordenes23jun
 zip -r ordenes16jun.zip ordenes
 
 mv /root/orion/menuManager/ordenes16jun.zip /root/orion/menuManager/archivo/ordenes16jun.zip
 
-cp -r /root/orion/menuManager/ordenes /root/orion/menuManager/archivo/ordenes2jun 
+cp -r /root/orion/menuManager/ordenes /root/orion/menuManager/archivo/ordenes23jun 
 
 %s/,-3,/20/g
 
