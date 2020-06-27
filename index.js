@@ -202,9 +202,11 @@ Object.size = function(obj) {
 // OPERACIÓN  //cambiar get a post para hacer sistema rudimentario de seguridad
 
 app.get('/admin', function (req, res) {
+	console.log(path.join(__dirname + '/sitio/admin.html'));
 	res.sendFile(path.join(__dirname + '/sitio/admin.html'));
 });
 app.get('/back', function (req, res) {
+
 	res.sendFile(path.join(__dirname + '/sitio/back.html'));
 });
 app.get('/status', function (req, res) {
