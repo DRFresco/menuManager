@@ -16,6 +16,9 @@ _ = require('underscore');
 //        /.-'     "     '-.\
 //         Julia Orion Smith
 
+const port = 3000; 
+
+
 app.use(bodyParser.json())
 var fs = require("fs");
 var path = require('path');
@@ -157,7 +160,10 @@ app.get('/adminPrint', function (req, res) {
 
 
 // BACK
+app.get('/operacion', function (req, res) {
+	res.sendFile(path.join(__dirname + '/sitio/operacion.html'));
 
+});
 app.post('/backconfirm', function (req, res) {
 	nombreorden=req.body["nombre"];
 	console.log("./ordenes/"+nombreorden)
@@ -222,7 +228,14 @@ app.get('/status', function (req, res) {
 app.post('/uploadmenu', function (req, res) {
 	newmenu=req.body["newmenu"];
 	menuManager.uploadmenu(newmenu,function (respuesta){
-		res.json(respuesta);
+		menuManager.liveMenu={};
+		menuManager.menu(function(menuR){
+			menuManager.updateCache(menuR);
+			menuManager.inicializa();
+			res.json(respuesta);
+			console.log("initializing...");
+		});
+		
 	});
 
 });
@@ -251,10 +264,10 @@ app.post('/closeOp', function (req, res) {
 });
 
 //PUERTO
-const port = 3000; //process.env.PORT;
+
 console.log(`Your port is ${port}`);
 
-app.listen(3000, function () {
+app.listen(port, function () {
   console.log('Example app listening on port '+port+'!!!');
 });
 

@@ -10,7 +10,7 @@
   <!-- MDBootstrap Datatables  -->
 <script type="text/javascript" src="js/addons/datatables.min.js"></script>
 
-  <title>Ciudad Silvestre</title>
+  <title>〔 〄 〕 - Orion</title>
 </head>
 <style type="text/css">
   table.dataTable thead .sorting:after,
@@ -26,7 +26,8 @@ table.dataTable thead .sorting_desc_disabled:before {
   bottom: .5em;
 }
 body{
-  background: url("img/jitomate.jpg");
+  background-color: black;
+ /* background: url("img/jitomate.jpg");*/
   /*background-size: cover;*/
 }
 .head{
@@ -342,6 +343,7 @@ function getStatus(){
           status="3-Listo para abrir";
           st=3;
         }
+      $(".notshow").hide();
       $("#op_"+st).show();
       $("#status").html(status)
       
