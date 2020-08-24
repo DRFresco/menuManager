@@ -180,15 +180,11 @@ exports.print=function (callback){
 		    ~Y~   \|    ~Y~   (___)    |/    ~Y~
 		    \|   \ |/   \| /  \~Y~/   \|    \ |/
 		   \\|// \\|// \\|/// \\|//  \\|// \\\|///
-		jgs^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+		jos^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-		      C I U D A D   S I L V E S T R E 
+		      ORION 
 
-		      CIUDADSILVESTRE.MX
-
-		      55 72117094 
-
-		      @CIUDAD_SILVESTRE
+		      
 
 		</pre>
 

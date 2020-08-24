@@ -10,7 +10,7 @@
 	<!-- MDBootstrap Datatables  -->
 <script type="text/javascript" src="js/addons/datatables.min.js"></script>
 
-	<title>Ciudad Silvestre</title>
+	<title>〔 〄 〕 - Orion</title>
 </head>
 <style type="text/css">
 	table.dataTable thead .sorting:after,
@@ -25,10 +25,7 @@ table.dataTable thead .sorting_desc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:before {
   bottom: .5em;
 }
-body{
-	background: url("img/jitomate.jpg");
-	/*background-size: cover;*/
-}
+
 .head{
 	text-align: center;
 	font-family: monospace;
@@ -213,29 +210,40 @@ body{
     background-color: white;
 }
 </style>
-
+<link rel="stylesheet" href="css/orion.css">
 <body>
 	<br>
 <div class="container head" >
 	<div class="row">
-		<div class="col-sm-6" >
+		<div class="col-sm-6" style="background-color:#8d97bd !important;>
 			<h1 ></h1>
 			<br>
 			<h5 style="color:black;"> Administrador de órdenes</h5>
-			<h5 style="color:black;"> Contacto por Whatsapp: 5572117094</h5>
+			<h5 style="color:black;"> </h5>
 			<br>
-			
+			<p style="color:black;">En esta sección se administran la ordenes que recibe el mercado desde el menú. Las órdenes se confirman al recibir el comprobante de pago. La acción de confirmarla crea la guía de entrega en forma de PDF. Una orden confirmada puede tambien "des-confirmarse"</p>
 			<p>Si deseas visualizar tu pedido, entra al siguiente link: <a href="http://www.ciudadsilvestre.mx/orden" target="_blank">www.ciudadsilvestre.mx/orden</a></p>
 			<!-- <input type="button" value="¿Cómo funciona?" name=""/> -->
 		</div>
 		<div class="col-sm-6">
-			<img src="img/orion.png" class="logo">
+			<div class="logo"></div><!-- <img src="img/logo.png" class="logo"> -->
 			<hr>
+			<input type="text" id="userF">
+      <input type="password" id="passwordF">
+      <br>
+      <br>
+      <input type="button" value="Actualizar lista" onclick="getOrdenes();" />
+
 			<!-- <span style="color:#49a954;">Hola! Lamentablemente la lista ya se cerró esta semana. La lista se actualiza los fines de semana y se cierra los días Martes a las 10AM. <br>
 				<p>Si quieres conocer más sobre que día se actualiza y como funcionan los pedidos  puedes escribirnos a nuestro WHATSAPP 5572117094. </p>
 
 	</span> -->
 		</div>
+		<div class="col-sm-4" >operaciones:<Br>
+			<div class="button_cont" align="center"><a class="button_c" href="#"  rel="nofollow noopener" onclick="getMatrizOrdenes()">Matríz de órdenes</a></div>
+			<div class="button_cont" align="center"><a class="button_c" href="#"  rel="nofollow noopener" onclick="getResumen()">Resumen por productor</a></div>
+		</div>
+		<div class="col-sm-8" >consola:<Br><textarea id="consola" class="form-control texta"></textarea></div>
 	</div>
 
 
@@ -289,56 +297,95 @@ body{
 <script type="text/javascript">
 $(document).ready(function(){
 	
-	getOrdenes();
+	//getOrdenes();
 
 
 });	
-
-
-function getOrdenes(){
-		$("#tabla_productos").html("")
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function() {
-  		if (this.readyState == 4 && this.status == 200) {
-	    var myObj = JSON.parse(this.responseText);
-	    _MENU=myObj;
-	    console.log(_MENU)
-	    for(orden in _MENU["ordenes"]){
-	    	status="<p style='color:blue;'>REGISTRADA</p>";
-	    	filerep='<a target="_blank" href="/ordenes/'+orden+'"'+'>JSON</a>';
-	    	boton='<div class="plu button-p" onclick=\'confirm("'+orden+'");\'>-</div>';
-	    	if(_MENU["bandeja"][orden]){status="<p style='color:yellowgreen;'>CONFIRMADA</p>";
-	    	filerep='<a target="_blank" href="/bandeja/'+orden+'.pdf"'+'>PDF</a>';
-	    boton='<div class="inc button-m" onclick=\'unconfirm("'+orden+'");\'>+</div>';}
-	    	orden_st=orden.replace(".json","");
-	    	orden_info=_MENU["ordenes"][orden];
-	    	trstr='<tr class="prow unselected" id="'+orden_st+'">\
-		      <td></td><td>'+orden_st+'</td>\
-		      <td style="background-color:#ffffff;">'+orden_info.nombre+'</td>\
-		      <td>'+orden_info.total+'</td>\
-		      <td>'+orden_info.telefono+'</td>\
-		      <td>'+"info"+'</td>\
-		      <td>'+status+'</td>\
-		      <td>'+filerep+'</td>\
-		      <td>'+boton+'</td>'
-		      ;
-		      $("#tabla_productos").append(trstr)
+function utf8_to_b64( str ) {
+  return window.btoa(unescape(encodeURIComponent( str )));
+}
+function getMatrizOrdenes(){
+	_P=utf8_to_b64($("#passwordF").val()+"||"+ $("#userF").val());
+    op={"permission":_P}
+	$.ajax({
+        url: '/orion/ordenes',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(op),
+        success: function (data){
+        	var matriz = data.replace(/\;/g, '\t');
+        	var matriz = matriz.replace(/<Br>/g, '\n');
+        	$("#consola").val(matriz)
+		    console.log(matriz)
+			    
+			   
 	    }
-	    
-	    //despliegaMenu();
-	    
-	  	}
-	};
-	xmlhttp.open("GET", "/backOrdenes", true);
-	xmlhttp.send();
+	});
+}
+function getResumen(){
+	_P=utf8_to_b64($("#passwordF").val()+"||"+ $("#userF").val());
+    op={"permission":_P}
+	$.ajax({
+        url: '/orion/resumen',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(op),
+        success: function (data){
+        	//obj=JSON.parse(data)
+        	//console.log(obj)
+        	$("#consola").val(data)
+		    
+			    
+			   
+	    }
+	});
+}
+function getOrdenes(){
+	_P=utf8_to_b64($("#passwordF").val()+"||"+ $("#userF").val());
+    op={"permission":_P}
+    $.ajax({
+        url: '/orion/backOrdenes',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(op),
+        success: function (data){
+        	var myObj = data;
+		    _MENU=myObj;
+		    console.log(_MENU)
+			    for(orden in _MENU["ordenes"]){
+			    	status="<p style='color:blue;'>REGISTRADA</p>";
+			    	filerep='<a target="_blank" href="/ordenes/'+orden+'"'+'>JSON</a>';
+			    	boton='<div class="plu button-p" onclick=\'confirm("'+orden+'");\'>-</div>';
+			    	if(_MENU["bandeja"][orden]){status="<p style='color:yellowgreen;'>CONFIRMADA</p>";
+			    	filerep='<a target="_blank" href="/bandeja/'+orden+'.pdf"'+'>PDF</a>';
+			    boton='<div class="inc button-m" onclick=\'unconfirm("'+orden+'");\'>+</div>';}
+			    	orden_st=orden.replace(".json","");
+			    	orden_info=_MENU["ordenes"][orden];
+			    	trstr='<tr class="prow unselected" id="'+orden_st+'">\
+				      <td></td><td>'+orden_st+'</td>\
+				      <td style="background-color:#ffffff;">'+orden_info.nombre+'</td>\
+				      <td>'+orden_info.total+'</td>\
+				      <td>'+orden_info.telefono+'</td>\
+				      <td>'+"info"+'</td>\
+				      <td>'+status+'</td>\
+				      <td>'+filerep+'</td>\
+				      <td>'+boton+'</td>'
+				      ;
+				      $("#tabla_productos").append(trstr)
+			    }
+	    }
+	});
+	$("#tabla_productos").html("")
+	
 }
 
 function confirm(nombre){
+	_P=utf8_to_b64($("#passwordF").val()+"||"+ $("#userF").val());
 		$(".button-m").hide();
 		$(".button-p").hide();
-		orden={"nombre":nombre}
+		orden={"nombre":nombre,"permission":_P}
 	$.ajax({
-        url: '/backconfirm',
+        url: '/orion/backconfirm',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(orden),
@@ -349,11 +396,12 @@ function confirm(nombre){
 	});
 }
 function unconfirm(nombre){
+	_P=utf8_to_b64($("#passwordF").val()+"||"+ $("#userF").val());
 	$(".button-m").hide();
 		$(".button-p").hide();
-		orden={"nombre":nombre}
+		orden={"nombre":nombre,"permission":_P}
 	$.ajax({
-        url: '/backunconfirm',
+        url: '/orion/backunconfirm',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(orden),

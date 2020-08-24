@@ -9,6 +9,8 @@ var pdf = require('html-pdf');
 const multer = require('multer');
 const csv = require('fast-csv');
 _ = require('underscore');
+const readline = require('readline');
+
 
 //          (_    ,_,    _) 
 //          / `'--) (--'` \
@@ -17,6 +19,7 @@ _ = require('underscore');
 //         Julia Orion Smith
 
 const port = 3000; 
+const _K = "MTIzNHx8b3Jpb24="; 
 
 
 app.use(bodyParser.json())
@@ -24,6 +27,7 @@ var fs = require("fs");
 var path = require('path');
 var menuManager = require('./menuManager');
 var printingSystem = require('./printingSystem');
+var mailer = require('./mailer');
 //console.log("public",__dirname + '/sitio')
 app.use('/', express.static(__dirname + '/sitio'));
 app.use('/bandeja/', express.static(__dirname + '/bandeja'));
@@ -60,19 +64,7 @@ app.post('/ordenview', function (req, res) {
   		res.json(orden);
   });
 });
-app.get('/ordenes', function (req, res) {
-  menuManager.getOrdenes(function(ordenes){
-  		res.send(ordenes);
-		console.log("corte de caja...");
-  });
-});
-app.get('/ordenaOrdenes', function (req, res) {
 
-  menuManager.ordenaOrdenes(function(ordenes){
-  		res.send(ordenes);
-		console.log("corte de caja...");
-  });
-});
 //MENÚ
 app.get('/menu', function (req, res) {
 	if( !isEmpty(menuManager.liveMenu) ){
@@ -119,7 +111,17 @@ app.get('/hello', function (req, res) {
 });
 //ADMIN
 app.get('/adminPrint', function (req, res) {
-	thistime="";
+	printsinglePDF(function(){
+		console.log("printed");
+		res.send("ok")
+	});
+
+});
+
+
+
+function printsinglePDF(callback) {
+thistime="";
 	bandeja={};
 	printed=0;
 	var options = { format: 'A4' };
@@ -146,7 +148,7 @@ app.get('/adminPrint', function (req, res) {
 				if(!bandeja[key] && printed<1){
 					printed++;
 					    pdf.create(htmls[key],{ format: 'Letter' }).toFile('./bandeja/'+key+'.pdf', function(err, res) {
-							if (err){console.log(err);} else {console.log(res);}
+							if (err){console.log(err);} else {console.log(res);callback();}
 						});
 				}
 		      
@@ -156,7 +158,22 @@ app.get('/adminPrint', function (req, res) {
 			 //  });
 		});
 	});
+}
+
+
+//ORION sec layer
+app.post('/orion/*', function (req, res, next) {
+	_P=req.body["permission"];
+	if(_P==_K){
+	
+		next();
+
+	}
+	else{
+		res.send({"status":"err","err":"incorrect key"})
+	}
 });
+
 
 
 // BACK
@@ -164,7 +181,7 @@ app.get('/operacion', function (req, res) {
 	res.sendFile(path.join(__dirname + '/sitio/operacion.html'));
 
 });
-app.post('/backconfirm', function (req, res) {
+app.post('/orion/backconfirm', function (req, res) {
 	nombreorden=req.body["nombre"];
 	console.log("./ordenes/"+nombreorden)
 	fs.readFile("./ordenes/"+nombreorden, (err, data) => {
@@ -182,7 +199,7 @@ app.post('/backconfirm', function (req, res) {
 	
 	
 });
-app.post('/backunconfirm', function (req, res) {
+app.post('/orion/backunconfirm', function (req, res) {
 	nombreorden=req.body["nombre"];
 	fs.unlink("./bandeja/"+nombreorden+".pdf", function (err) {
 	    if (err) throw err;
@@ -190,11 +207,33 @@ app.post('/backunconfirm', function (req, res) {
 	     res.sendStatus(200)
 	}); 
 });
-app.get('/backOrdenes', function (req, res) {
+app.post('/orion/backOrdenes', function (req, res) {
 	menuManager.getOrdenesJson(function(ordenes){
   		res.send(ordenes);
   	});
 
+});
+app.post('/orion/ordenes', function (req, res) {
+  menuManager.getOrdenes(function(ordenes){
+  		res.send(ordenes);
+		console.log("corte de caja...");
+  });
+});
+app.post('/orion/resumen', function (req, res) {
+
+  menuManager.getResumen(function(ordenes){
+  		csvsend="Productor\t Producto\t total de unidades ordenadas\t total \n";
+  		for (productor in ordenes){
+  			for(producto in ordenes[productor]){
+  				csvsend+=productor+"\t"+producto+
+  				"\t"+ordenes[productor][producto][0]
+  				+"\t"+ordenes[productor][producto][1]
+  				+"\n";
+  			}
+  		}
+  		res.send(csvsend);
+		console.log("productores...");
+  });
 });
 
 Object.size = function(obj) {
@@ -205,14 +244,11 @@ Object.size = function(obj) {
     return size;
 };
 
-// OPERACIÓN  //cambiar get a post para hacer sistema rudimentario de seguridad
-
+// OPERACIÓN  
 app.get('/orionadmin', function (req, res) {
-	console.log(path.join(__dirname + '/sitio/admin.html'));
 	res.sendFile(path.join(__dirname + '/sitio/admin.html'));
 });
 app.get('/back', function (req, res) {
-
 	res.sendFile(path.join(__dirname + '/sitio/back.html'));
 });
 app.get('/status', function (req, res) {
@@ -225,42 +261,60 @@ app.get('/status', function (req, res) {
 	if (fs.existsSync(menufile)){status.menu=1; }
 	res.json(status);
 });
-app.post('/uploadmenu', function (req, res) {
-	newmenu=req.body["newmenu"];
-	menuManager.uploadmenu(newmenu,function (respuesta){
-		menuManager.liveMenu={};
-		menuManager.menu(function(menuR){
-			menuManager.updateCache(menuR);
-			menuManager.inicializa();
-			res.json(respuesta);
-			console.log("initializing...");
+app.post('/orion/uploadmenu', function (req, res) {
+	
+		newmenu=req.body["newmenu"];
+		menuManager.uploadmenu(newmenu,function (respuesta){
+			menuManager.liveMenu={};
+			menuManager.menu(function(menuR){
+				menuManager.updateCache(menuR);
+				menuManager.inicializa();
+				res.json(respuesta);
+				console.log("initializing...");
+			});
+			
 		});
-		
-	});
+	
 
 });
-app.post('/closeShop', function (req, res) {
-	menuManager.closeShop(function(err){
-		if(!err){
-			res.send({"status":"suave",});
-		}
-		else{
-			res.send({"status":"err","err":err});
-		}
-		
-	})
+app.post('/orion/closeShop', function (req, res) {
+
+		menuManager.closeShop(function(err){
+			if(!err){
+				res.send({"status":"suave",});
+			}
+			else{
+				res.send({"status":"err","err":err});
+			}
+			
+		})
+	
 })
-app.post('/closeOp', function (req, res) {
-	console.log("closing operation");
-	menuManager.closeOp(function(err){
-		if(!err){
-			res.send({"status":"suave",});
-		}
-		else{
-			res.send({"status":"err","err":err});
-		}
+app.post('/orion/closeOp', function (req, res) {
+	
+		console.log("closing operation");
+		menuManager.closeOp(function(err){
+			if(!err){
+				res.send({"status":"suave",});
+			}
+			else{
+				res.send({"status":"err","err":err});
+			}
+			
+		})
+	
 		
+	
+});
+
+//MAILER
+
+app.get('/testmail', function (req, res) {
+	mailer.testmail(function(error){
+		if(error){res.send(error);}
+		else{res.send("cool");}
 	})
+	
 });
 
 //PUERTO
